@@ -53,6 +53,6 @@ just pull                # commit the server-assigned ids
 | 01 Missing identity | follow-along | none |
 | 02 Application identity | follow-along | applies checkpoint 02; registration is manual |
 | 03 User delegation | follow-along | applies checkpoint 03; sign-in is manual |
-| 04 Durable execution | a completed `SettlementWorkflow` in `workshop-local` | runs one settlement without interruption |
+| 04 Durable execution | follow-along | runs one settlement without interruption |
 
 `instruqt track test` can't get past Exercise 02, because registration and sign-in need a real person and a GitHub account.

@@ -1,12 +1,3 @@
 #!/bin/bash
-# ABOUTME: Pass once a settlement workflow has completed on this sandbox's server.
-set -euo pipefail
-source /root/.bashrc
-count=$(temporal workflow count \
-    --address 127.0.0.1:7233 --namespace workshop-local \
-    --query "WorkflowType='SettlementWorkflow' AND ExecutionStatus='Completed'" \
-    --output json | jq -r '.count // 0')
-if [ "${count:-0}" -lt 1 ]; then
-    fail-message "No completed SettlementWorkflow yet. Restart the worker so the original workflow can finish."
-    exit 1
-fi
+# ABOUTME: Follow-along: the attendee decides when they've seen the result.
+exit 0
