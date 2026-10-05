@@ -1,9 +1,10 @@
 ---
 slug: durable-execution
-id: ""
+id: siix7i1gdajk
 type: challenge
-title: "Exercise 04: Durable execution"
-teaser: Kill a settlement worker mid-workflow, restart it, and confirm no credentials landed in history.
+title: 'Exercise 04: Durable execution'
+teaser: Kill a settlement worker mid-workflow, restart it, and confirm no credentials
+  landed in history.
 notes:
 - type: text
   contents: |-
@@ -16,30 +17,35 @@ notes:
 
     Each activity gets a fresh Keycard credential when it runs. Temporal records every input and result forever. You'll check that none of those credentials ended up in the record.
 tabs:
-- title: Temporal UI
+- id: dqqrryj6gtus
+  title: Temporal UI
   type: service
   hostname: workshop
-  port: 8233
   path: /namespaces/workshop-local/workflows
-- title: Worker
+  port: 8233
+- id: rfixxa9ynqi9
+  title: Worker
   type: terminal
   hostname: workshop
   workdir: /root/workshop/temporal
-- title: Client
+- id: mpxk6zkw7eck
+  title: Client
   type: terminal
   hostname: workshop
   workdir: /root/workshop/temporal
-- title: Editor
-  type: service
+- id: hfxjdoyg94zn
+  title: Editor
+  type: code
   hostname: workshop
-  port: 8080
-  path: /?folder=/root/workshop
-- title: Keycard
+  path: /root/workshop
+- id: bzpex6hvzn6g
+  title: Keycard
   type: website
   url: https://console.keycard.ai
   new_window: true
 difficulty: intermediate
 timelimit: 1200
+enhanced_loading: null
 ---
 
 # Read the code

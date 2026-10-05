@@ -1,6 +1,6 @@
 #!/bin/bash
-# ABOUTME: Track setup: write .env files from Instruqt secrets, then start code-server,
-# Temporal, and Expense Desk. The attendee tree is baked at /root/workshop.
+# ABOUTME: Track setup: write .env files from Instruqt secrets, then start
+# Temporal and Expense Desk. The attendee tree is baked at /root/workshop.
 set -euo pipefail
 
 until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
@@ -56,17 +56,6 @@ fi
 echo "export EXPENSE_DESK_ORIGIN=${ORIGIN}" >> /root/.bashrc
 echo "${ORIGIN}/callback" > "$WORKSHOP/CALLBACK_URL.txt"
 
-if ! curl -sf -o /dev/null "http://127.0.0.1:8080/" 2>/dev/null; then
-    nohup code-server \
-        --bind-addr "0.0.0.0:8080" \
-        --auth none \
-        --disable-telemetry \
-        --disable-update-check \
-        --user-data-dir /root/.cs-workshop \
-        "$WORKSHOP" > /tmp/code-server-8080.log 2>&1 &
-    disown || true
-fi
-
 nohup temporal server start-dev \
     --ip 0.0.0.0 \
     --namespace workshop-local \
@@ -87,17 +76,5 @@ temporal_ready || { echo "==> Temporal dev server did not start."; tail -20 /tmp
 # the sandbox up so the editor and terminals still work.
 workshop-services start \
     || echo "==> WARNING: Expense Desk isn't running. Fill in the .env values, then run: workshop-services start"
-
-code_server_ready() {
-    [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 \
-        "http://127.0.0.1:8080/?folder=${WORKSHOP}" 2>/dev/null)" = "200" ] \
-        && grep -q "Extension host agent started" /tmp/code-server-8080.log 2>/dev/null
-}
-for _ in $(seq 1 90); do
-    code_server_ready && break
-    sleep 1
-done
-code_server_ready \
-    || { echo "==> WARNING: code-server 8080 not ready."; tail -20 /tmp/code-server-8080.log || true; }
 
 echo "==> Track setup complete. Expense Desk: ${ORIGIN}"

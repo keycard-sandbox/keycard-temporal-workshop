@@ -1,8 +1,8 @@
 ---
 slug: application-identity
-id: ""
+id: ncnmglwnp6hs
 type: challenge
-title: "Exercise 02: Application identity"
+title: 'Exercise 02: Application identity'
 teaser: Register your agent in Keycard and make it authenticate as itself.
 notes:
 - type: text
@@ -16,27 +16,30 @@ notes:
 
     You join the workshop's Keycard organization with your GitHub account. Have your GitHub handle ready. You use it in every identifier you create.
 tabs:
-- title: Expense Desk
+- id: xjpko1x3xzth
+  title: Expense Desk
   type: service
   hostname: workshop
-  port: 8400
   path: /
-  new_window: true
-- title: Keycard
+  port: 8400
+- id: fnpf0bzyz9yg
+  title: Keycard
   type: website
   url: https://console.keycard.ai
   new_window: true
-- title: Editor
-  type: service
+- id: nn2xtezak31z
+  title: Editor
+  type: code
   hostname: workshop
-  port: 8080
-  path: /?folder=/root/workshop
-- title: Terminal
+  path: /root/workshop
+- id: v62nx1undplb
+  title: Terminal
   type: terminal
   hostname: workshop
   workdir: /root/workshop
 difficulty: intermediate
 timelimit: 1800
+enhanced_loading: null
 ---
 
 # Join Keycard
@@ -74,7 +77,7 @@ KEYCARD_CLIENT_SECRET=YOUR-CLIENT-SECRET
 AGENT_RESOURCE=urn:agent:resource:YOUR-GITHUB-HANDLE
 ```
 
-The editor saves as you type. Run through **Check your registration** in the guide before moving on.
+Save the file. Run through **Check your registration** in the guide before moving on.
 
 # Switch to application authentication
 

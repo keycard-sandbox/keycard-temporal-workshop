@@ -7,7 +7,6 @@ containers:
   ports:
   - 8400   # Expense Desk preview (Caddy forwards to 127.0.0.1:8400)
   - 8233   # Temporal UI
-  - 8080   # code-server
 # Values are set in the Instruqt web UI. They reach lifecycle scripts only;
 # track_scripts/setup-workshop writes them into the .env files.
 secrets:

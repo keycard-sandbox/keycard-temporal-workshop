@@ -7,6 +7,8 @@
 # on the container's own address at 8400, which is what Instruqt's preview
 # proxy reaches, and rewrites Host to the preview hostname because Expense
 # Desk's TrustedHostMiddleware accepts only the EXPENSE_DESK_ORIGIN host.
+# Caddy also narrows the app's frame-ancestors from 'none' to Instruqt pages,
+# so the Expense Desk tab can render embedded in the lab.
 set -uo pipefail
 
 WORKSHOP=/root/workshop
@@ -56,12 +58,14 @@ http://:8400 {
 	bind ${bind}
 	reverse_proxy 127.0.0.1:8400 {
 		header_up Host ${host}
+		header_down Content-Security-Policy "frame-ancestors 'none'" "frame-ancestors https://*.instruqt.com"
 	}
 }
 EOF
         nohup caddy run --config "$LOGS/Caddyfile" --adapter caddyfile \
             > "$LOGS/caddy.log" 2>&1 &
     fi
+    wait_for "http://$(hostname -I | awk '{print $1}'):8400/" caddy "caddy run" || return 1
     echo "==> Expense Desk is running. Logs: $LOGS/mcp.log, $LOGS/web.log"
 }
 

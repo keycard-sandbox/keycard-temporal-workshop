@@ -1,8 +1,8 @@
 ---
 slug: user-delegation
-id: ""
+id: 9vxqvyeiktom
 type: challenge
-title: "Exercise 03: User delegation"
+title: 'Exercise 03: User delegation'
 teaser: Sign in, approve a partner's expense, and watch Expense Desk refuse your own.
 notes:
 - type: text
@@ -11,32 +11,36 @@ notes:
 
     Application identity says which software made the call. It doesn't say which person asked. Sign in and your agent carries your identity through two token exchanges to the ledger.
 tabs:
-- title: Expense Desk
+- id: zusp4am3j8rt
+  title: Expense Desk
   type: service
   hostname: workshop
-  port: 8400
   path: /
+  port: 8400
   new_window: true
-- title: Keycard
+- id: fbw0yniaimnv
+  title: Keycard
   type: website
   url: https://console.keycard.ai
   new_window: true
-- title: Editor
-  type: service
+- id: tsnylbthituq
+  title: Editor
+  type: code
   hostname: workshop
-  port: 8080
-  path: /?folder=/root/workshop
-- title: Terminal
+  path: /root/workshop
+- id: dgnlpmrbofqw
+  title: Terminal
   type: terminal
   hostname: workshop
   workdir: /root/workshop
 difficulty: intermediate
 timelimit: 1200
+enhanced_loading: null
 ---
 
 # Sign in
 
-Open [button label="Expense Desk" background="#444CE7"](tab-0) and sign in with GitHub. Then ask:
+Open [button label="Expense Desk" background="#444CE7"](tab-0) and sign in with GitHub. It opens in its own window so the GitHub sign-in can complete. Then ask:
 
 ```text
 Which account am I using, and what is my approval limit?

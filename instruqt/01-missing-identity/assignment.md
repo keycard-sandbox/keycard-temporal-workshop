@@ -1,9 +1,10 @@
 ---
 slug: missing-identity
-id: ""
+id: 22yh8kzjko1y
 type: challenge
-title: "Exercise 01: Missing identity"
-teaser: Submit and review expenses through one shared API key, then try to work out who did what.
+title: 'Exercise 01: Missing identity'
+teaser: Submit and review expenses through one shared API key, then try to work out
+  who did what.
 notes:
 - type: text
   contents: |-
@@ -18,28 +19,30 @@ notes:
 
     Expense Desk, the Expense MCP server, and a Temporal dev server started with your sandbox. The Ledger API is shared, so you'll see other attendees' expenses as they work.
 tabs:
-- title: Expense Desk
+- id: ks2jllyurxbk
+  title: Expense Desk
   type: service
   hostname: workshop
-  port: 8400
   path: /
-  new_window: true
-- title: Editor
-  type: service
+  port: 8400
+- id: iaq4mnq7qnnq
+  title: Editor
+  type: code
   hostname: workshop
-  port: 8080
-  path: /?folder=/root/workshop
-- title: Terminal
+  path: /root/workshop
+- id: ksptesayvfan
+  title: Terminal
   type: terminal
   hostname: workshop
   workdir: /root/workshop
 difficulty: basic
 timelimit: 900
+enhanced_loading: null
 ---
 
 # Open Expense Desk
 
-Click [button label="Expense Desk" background="#444CE7"](tab-0). It opens in a new browser window, because Expense Desk refuses to render inside a frame.
+Click [button label="Expense Desk" background="#444CE7"](tab-0).
 
 The full exercise lives in `docs/01-missing-identity.md`. Open it in the [button label="Editor" background="#444CE7"](tab-1) if you want the long version.
 

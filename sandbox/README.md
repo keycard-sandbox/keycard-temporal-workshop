@@ -11,11 +11,10 @@ One container, hostname `workshop`. The image bakes the attendee package at `/ro
 | Expense MCP server | `127.0.0.1:8100` | Expense Desk only |
 | Expense Desk (`agent/web.py`) | `127.0.0.1:8400` | Caddy on the container address, port 8400 |
 | Temporal dev server and UI | `0.0.0.0:7233`, `:8233` | Temporal UI tab |
-| code-server | `0.0.0.0:8080` | Editor tab |
 
 `workshop-services start|stop|restart|status` manages the MCP server, Expense Desk and Caddy. Logs are in `/tmp/workshop/`.
 
-Expense Desk listens on `127.0.0.1` only, and its `TrustedHostMiddleware` accepts only the `EXPENSE_DESK_ORIGIN` hostname. Caddy listens on the container's own address, which is what Instruqt's proxy reaches, and rewrites `Host` to the preview hostname. Expense Desk also sends `frame-ancestors 'none'`, so its tab opens in a new browser window.
+Expense Desk listens on `127.0.0.1` only, and its `TrustedHostMiddleware` accepts only the `EXPENSE_DESK_ORIGIN` hostname. Caddy listens on the container's own address, which is what Instruqt's proxy reaches, and rewrites `Host` to the preview hostname. Expense Desk sends `frame-ancestors 'none'`. Caddy narrows that to `https://*.instruqt.com` so Exercises 01 and 02 can embed it. Exercise 03 opens it in its own window, because GitHub sign-in can't complete inside a frame.
 
 ## Preview origin and callback
 

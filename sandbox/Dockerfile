@@ -27,29 +27,6 @@ RUN curl -fsSL \
     | tar -xz -C /usr/local/bin caddy \
     && chmod +x /usr/local/bin/caddy
 
-ARG CODE_SERVER_VERSION=4.96.4
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version ${CODE_SERVER_VERSION}
-
-# Workspace trust must be off or code-server shows a blank page. Dotfiles stay
-# visible so attendees can edit agent/.env in Exercise 02.
-RUN mkdir -p /root/.cs-workshop/User && printf '%s\n' \
-      '{' \
-      '    "security.workspace.trust.enabled": false,' \
-      '    "workbench.colorTheme": "Default Dark+",' \
-      '    "workbench.startupEditor": "none",' \
-      '    "workbench.editor.enablePreview": false,' \
-      '    "editor.fontSize": 14,' \
-      '    "editor.minimap.enabled": false,' \
-      '    "files.autoSave": "afterDelay",' \
-      '    "files.autoSaveDelay": 300,' \
-      '    "telemetry.telemetryLevel": "off",' \
-      '    "explorer.compactFolders": false,' \
-      '    "files.exclude": { "**/.venv": true, "**/__pycache__": true, "**/uv.lock": true }' \
-      '}' > /root/.cs-workshop/User/settings.json
-
-RUN code-server --user-data-dir /root/.cs-workshop --install-extension detachhead.basedpyright \
-    || echo "==> WARNING: basedpyright did not install; the editor still works without it."
-
 COPY README.md .gitignore /root/workshop/
 COPY agent/ /root/workshop/agent/
 COPY mcp-server/ /root/workshop/mcp-server/
