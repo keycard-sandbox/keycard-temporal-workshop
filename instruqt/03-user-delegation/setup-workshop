@@ -1,0 +1,6 @@
+#!/bin/bash
+# ABOUTME: Exercise 03 uses the Exercise 02 processes; make sure they're up.
+set -euo pipefail
+source /root/.bashrc
+workshop-services start \
+    || echo "==> WARNING: Expense Desk isn't running. Fill in the .env values, then run: workshop-services start"

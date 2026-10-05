@@ -1,0 +1,19 @@
+version: "3"
+containers:
+- name: workshop
+  image: ghcr.io/keycard-sandbox/keycard-temporal-workshop-sandbox:latest
+  shell: /bin/bash
+  memory: 4096
+  ports:
+  - 8400   # Expense Desk preview (Caddy forwards to 127.0.0.1:8400)
+  - 8233   # Temporal UI
+  - 8080   # code-server
+# Values are set in the Instruqt web UI. They reach lifecycle scripts only;
+# track_scripts/setup-workshop writes them into the .env files.
+secrets:
+- name: KEYCARD_WORKSHOP_LLM_API_KEY
+- name: KEYCARD_WORKSHOP_LEDGER_API_KEY
+- name: KEYCARD_WORKSHOP_MCP_CLIENT_ID
+- name: KEYCARD_WORKSHOP_MCP_CLIENT_SECRET
+- name: KEYCARD_WORKSHOP_WORKER_CLIENT_ID
+- name: KEYCARD_WORKSHOP_WORKER_CLIENT_SECRET

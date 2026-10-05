@@ -1,0 +1,4 @@
+interface:
+  display_name: "Keycard + Temporal workshop"
+  short_description: "Workshop setup, concepts, and troubleshooting"
+  default_prompt: "Use $keycard-temporal-workshop to help me understand and complete the workshop from my current exercise."

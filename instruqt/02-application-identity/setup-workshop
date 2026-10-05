@@ -1,0 +1,6 @@
+#!/bin/bash
+# ABOUTME: Keep the starter running; the attendee applies checkpoint 02 after registering.
+set -euo pipefail
+source /root/.bashrc
+workshop-services start \
+    || echo "==> WARNING: Expense Desk isn't running. Fill in the .env values, then run: workshop-services start"

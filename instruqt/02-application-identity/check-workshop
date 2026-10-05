@@ -1,0 +1,3 @@
+#!/bin/bash
+# ABOUTME: Follow-along: the attendee decides when they've seen the result.
+exit 0

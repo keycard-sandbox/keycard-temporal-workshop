@@ -1,0 +1,8 @@
+#!/bin/bash
+# ABOUTME: Track cleanup. The sandbox is discarded afterward; stop processes so a
+# reused container never holds a stale worker on the settlement queue.
+set -uo pipefail
+pkill -f "demo.py worker" || true
+workshop-services stop || true
+pkill -f "temporal server start-dev" || true
+exit 0

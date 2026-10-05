@@ -1,0 +1,15 @@
+[project]
+name = "keycardai-temporal-demo"
+version = "0.1.0"
+description = "Settlement demo for keycardai-temporal: per-call Keycard token minting in a Temporal worker"
+readme = "README.md"
+authors = [
+    { name = "Kim Maida", email = "kim.maida@keycard.ai" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "keycardai-temporal>=0.4.1",
+]
+
+[tool.uv]
+package = false

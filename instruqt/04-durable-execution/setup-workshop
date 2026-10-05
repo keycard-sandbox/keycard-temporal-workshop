@@ -1,0 +1,10 @@
+#!/bin/bash
+# ABOUTME: Exercise 04 needs the settlement component baked into the image.
+set -euo pipefail
+source /root/.bashrc
+if [ ! -f /root/workshop/temporal/demo.py ]; then
+    echo "temporal/demo.py is missing from this image. Rebuild it with just sandbox-build." >&2
+    exit 1
+fi
+pkill -f "demo.py worker" || true
+temporal operator namespace describe -n workshop-local --address 127.0.0.1:7233 >/dev/null

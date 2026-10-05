@@ -1,0 +1,6 @@
+#!/bin/bash
+# ABOUTME: Exercise 01 runs the starter wiring that the image ships with.
+set -euo pipefail
+source /root/.bashrc
+workshop-services start \
+    || echo "==> WARNING: Expense Desk isn't running. Fill in the .env values, then run: workshop-services start"

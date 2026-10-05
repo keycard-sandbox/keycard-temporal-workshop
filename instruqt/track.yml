@@ -1,0 +1,49 @@
+slug: keycard-temporal-secure-agents
+id: ""
+title: Secure Agents with Keycard and Temporal
+teaser: Take an expense agent from a shared API key to verified identity, then
+  watch Temporal finish a settlement after its worker dies.
+description: |-
+  Expense Desk is an AI agent that files and approves expenses through an MCP server and a shared Ledger API. It starts with one shared API key, so nobody can tell who did what.
+
+  - Exercise 01: submit and review expenses with the shared key, then try to work out who approved what.
+  - Exercise 02: register your agent in Keycard and switch it to application identity.
+  - Exercise 03: sign in, approve a partner's expense, and watch self-approval get refused.
+  - Exercise 04: run a Temporal settlement workflow, kill its worker mid-run, restart it, and confirm no credentials landed in workflow history.
+
+  Expense Desk, the MCP server, and a Temporal dev server run inside your sandbox. Exercises 02 and 03 need a GitHub account for Keycard sign-in.
+icon: ""
+tags:
+- temporal
+- python
+- keycard
+- security
+- agents
+- mcp
+owner: temporal
+developers:
+- mason.egger@temporal.io
+idle_timeout: 1800
+timelimit: 4500
+maintenance: true
+lab_config:
+  extend_ttl: 900
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: true
+  loadingMessages:
+  - Starting the Temporal dev server...
+  - Starting the Expense MCP server...
+  - Starting Expense Desk...
+  - Writing your preview URL into agent/.env...
+  - Opening the code editor...
+  - Connecting to the shared Ledger API...
+  - Preparing the terminals...
+  - Loading the Temporal Web UI...
+  - Almost ready...
+  - Your lab is starting...
+  theme:
+    name: modern-dark
+  default_layout: AssignmentLeft
+  default_layout_sidebar_size: 33
+  override_challenge_layout: true
