@@ -1,0 +1,8 @@
+#!/bin/bash
+# ABOUTME: Applies the code change only. Keycard registration and agent/.env
+# credentials are per attendee and can't be scripted.
+set -euo pipefail
+source /root/.bashrc
+cd /root/workshop
+uv run --locked --project agent python checkpoints/restore.py 02
+workshop-services restart

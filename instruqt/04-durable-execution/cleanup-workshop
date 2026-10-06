@@ -1,0 +1,5 @@
+#!/bin/bash
+# ABOUTME: Stop any settlement worker the attendee left running.
+set -uo pipefail
+pkill -f "demo.py worker" || true
+exit 0

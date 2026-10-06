@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Expense Desk</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/vendor/markdown-it.min.js" defer></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <a class="wordmark" href="/">Expense Desk</a
+      ><span id="identity">Connecting…</span
+      ><button id="signin" hidden>Sign in</button
+      ><button id="signout" hidden>Sign out</button>
+    </header>
+    <p id="banner" role="alert" hidden></p>
+    <p id="copy-status" role="status" aria-live="polite"></p>
+    <section id="gate" class="gate" hidden>
+      <h1>Company expenses,<br />with your agent.</h1>
+      <p>
+        File an expense, review a request, and follow the money. Start a
+        conversation to get things moving.
+      </p>
+      <button id="application" class="primary">Continue as Expense Desk Agent</button>
+    </section>
+    <template id="welcome-template">
+      <div id="welcome">
+        <h2>What needs taking care of?</h2>
+        <p>
+          Ask me to file an expense, find a request, or review one that needs a
+          decision.
+        </p>
+      </div>
+    </template>
+    <main id="desk" hidden>
+      <section class="conversation" aria-labelledby="conversation-title">
+        <div class="section-heading">
+          <h1 id="conversation-title">Your expense assistant</h1>
+        </div>
+        <div id="messages" role="log" aria-label="Conversation"></div>
+        <p id="progress" role="status"></p>
+        <form id="composer">
+          <label for="message">Message the agent</label>
+          <div class="input-row">
+            <textarea
+              id="message"
+              rows="3"
+              maxlength="4000"
+              required
+              placeholder="File a $42 expense for a taxi to a client meeting"
+            ></textarea
+            ><button id="send" class="primary" type="submit">Send</button>
+          </div>
+          <p class="muted">Enter to send. Shift + Enter for a new line.</p>
+        </form>
+      </section>
+      <section class="expenses" aria-labelledby="expenses-title">
+        <div class="section-heading">
+          <h2 id="expenses-title">Expenses</h2>
+          <button id="refresh" aria-describedby="refresh-hint">Refresh</button>
+        </div>
+        <p id="refresh-hint" class="muted">Your chat refreshes this view. Use Refresh to see other people's changes or automatic review results.</p>
+        <div class="filter">
+          <div class="filter-control">
+            <label for="ownership">Show</label>
+            <select id="ownership">
+              <option value="mine">My expenses</option>
+              <option value="all">All expenses</option>
+            </select>
+          </div>
+          <div class="filter-control">
+            <label for="status">Status</label>
+            <select id="status">
+              <option value="">All</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+          <span class="muted">Ask the agent to submit or review expenses.</span>
+        </div>
+        <p id="list-state" role="status">Loading expenses…</p>
+        <div id="rows" class="rows"></div>
+        <section id="detail" aria-label="Selected expense">
+          <p class="muted">
+            Choose an expense to see its details and Activity.
+          </p>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

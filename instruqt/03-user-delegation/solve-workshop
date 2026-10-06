@@ -1,0 +1,7 @@
+#!/bin/bash
+# ABOUTME: Sign-in is interactive; restore the authenticated code so Exercise 04 starts clean.
+set -euo pipefail
+source /root/.bashrc
+cd /root/workshop
+uv run --locked --project agent python checkpoints/restore.py 03
+workshop-services restart

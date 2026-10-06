@@ -1,0 +1,12 @@
+#!/bin/bash
+# ABOUTME: Run one settlement end to end without the interruption.
+set -euo pipefail
+source /root/.bashrc
+cd /root/workshop/temporal
+pkill -f "demo.py worker" || true
+nohup uv run --locked --env-file .env demo.py worker > /tmp/workshop/settlement-worker.log 2>&1 &
+WORKER=$!
+sleep 5
+timeout 180 uv run --locked --env-file .env demo.py run
+kill "$WORKER" 2>/dev/null || true
+wait "$WORKER" 2>/dev/null || true

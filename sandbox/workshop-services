@@ -1,0 +1,96 @@
+#!/bin/bash
+# ABOUTME: Start, stop, or restart the Expense Desk processes in the Instruqt sandbox.
+#
+#   workshop-services start|stop|restart|status
+#
+# MCP (8100) and Expense Desk (8400) listen on 127.0.0.1 only. Caddy listens
+# on the container's own address at 8400, which is what Instruqt's preview
+# proxy reaches, and rewrites Host to the preview hostname because Expense
+# Desk's TrustedHostMiddleware accepts only the EXPENSE_DESK_ORIGIN host.
+# Caddy also narrows the app's frame-ancestors from 'none' to Instruqt pages,
+# so the Expense Desk tab can render embedded in the lab.
+set -uo pipefail
+
+WORKSHOP=/root/workshop
+LOGS=/tmp/workshop
+mkdir -p "$LOGS"
+
+origin_host() {
+    sed -n 's|^EXPENSE_DESK_ORIGIN=https\{0,1\}://\([^/:]*\).*|\1|p' "$WORKSHOP/agent/.env" | tail -1
+}
+
+# Stop waiting as soon as the process exits; a missing .env value makes
+# both servers exit at startup with a message naming the field.
+wait_for() {
+    local url=$1 name=$2 process=$3
+    for _ in $(seq 1 60); do
+        curl -s -o /dev/null --max-time 2 "$url" && return 0
+        pgrep -f "$process" >/dev/null || break
+        sleep 1
+    done
+    echo "==> $name did not start. Last log lines:"
+    tail -20 "$LOGS/$name.log"
+    return 1
+}
+
+start() {
+    cd "$WORKSHOP" || exit 1
+    if ! pgrep -f "mcp-server/server.py" >/dev/null; then
+        nohup uv run --locked --project mcp-server python mcp-server/server.py \
+            > "$LOGS/mcp.log" 2>&1 &
+    fi
+    wait_for http://127.0.0.1:8100/ mcp "mcp-server/server.py" || return 1
+    if ! pgrep -f "agent/web.py" >/dev/null; then
+        nohup uv run --locked --project agent python agent/web.py \
+            > "$LOGS/web.log" 2>&1 &
+    fi
+    wait_for http://127.0.0.1:8400/ web "agent/web.py" || return 1
+    if ! pgrep -x caddy >/dev/null; then
+        local bind host
+        bind=$(hostname -I | awk '{print $1}')
+        host=$(origin_host)
+        cat > "$LOGS/Caddyfile" <<EOF
+{
+	admin off
+	auto_https off
+}
+http://:8400 {
+	bind ${bind}
+	reverse_proxy 127.0.0.1:8400 {
+		header_up Host ${host}
+		header_down Content-Security-Policy "frame-ancestors 'none'" "frame-ancestors https://*.instruqt.com"
+	}
+}
+EOF
+        nohup caddy run --config "$LOGS/Caddyfile" --adapter caddyfile \
+            > "$LOGS/caddy.log" 2>&1 &
+    fi
+    wait_for "http://$(hostname -I | awk '{print $1}'):8400/" caddy "caddy run" || return 1
+    echo "==> Expense Desk is running. Logs: $LOGS/mcp.log, $LOGS/web.log"
+}
+
+stop() {
+    pkill -f "agent/web.py" || true
+    pkill -f "mcp-server/server.py" || true
+    pkill -x caddy || true
+    for _ in $(seq 1 10); do
+        pgrep -f "agent/web.py|mcp-server/server.py" >/dev/null || break
+        sleep 1
+    done
+    echo "==> Expense Desk stopped."
+}
+
+status() {
+    for name in "mcp-server/server.py" "agent/web.py"; do
+        if pgrep -f "$name" >/dev/null; then echo "running  $name"; else echo "stopped  $name"; fi
+    done
+    if pgrep -x caddy >/dev/null; then echo "running  preview forwarder"; else echo "stopped  preview forwarder"; fi
+}
+
+case "${1:-}" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop; start ;;
+    status) status ;;
+    *) echo "Usage: workshop-services start|stop|restart|status"; exit 2 ;;
+esac

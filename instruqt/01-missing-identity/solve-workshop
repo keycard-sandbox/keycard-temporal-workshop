@@ -1,0 +1,5 @@
+#!/bin/bash
+# ABOUTME: Nothing to solve: Exercise 01 observes the shared-key starter.
+set -euo pipefail
+source /root/.bashrc
+workshop-services start
