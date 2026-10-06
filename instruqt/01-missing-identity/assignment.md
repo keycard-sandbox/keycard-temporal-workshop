@@ -40,46 +40,110 @@ timelimit: 900
 enhanced_loading: null
 ---
 
-# Open Expense Desk
+Expense Desk is an AI agent that files and approves expenses.
+It doesn't work with the expense records directly.
+It calls a Model Context Protocol (MCP) server, a service that gives an agent tools to use.
+The MCP server then calls the *Ledger API*, which stores the expenses.
+Right now, every one of those calls uses the same shared API key.
+Everyone in this room holds that key.
 
-Click [button label="Expense Desk" background="#444CE7"](tab-0).
+In this exercise, you'll submit an expense, review someone else's, and then try to work out who did what.
 
-The full exercise lives in `docs/01-missing-identity.md`. Open it in the [button label="Editor" background="#444CE7"](tab-1) if you want the long version.
+## Step 1: Opening Expense Desk
 
-# Submit an expense
+Your sandbox has already started Expense Desk and the MCP server for you.
+Click on the [button label="Expense Desk" background="#444CE7"](tab-0) tab to open it.
 
-Ask the agent to file one. Pick your own amount and description:
+Everyone in the workshop shares one Ledger API.
+You'll see other people's expenses appear as they work.
+A fresh environment starts empty, so don't worry if the list is blank when you first open it.
+
+Now that Expense Desk is open, you'll submit your first expense.
+
+## Step 2: Submitting an expense
+
+Ask the Expense Desk agent to submit an expense in the chat.
+Choose your own amount and description.
+For example:
 
 ```text
 Submit a $75 expense for snacks for the workshop.
 ```
 
-Give it a name when it asks. An email is optional. Neither one proves who you are. Save the expense ID it returns.
+The agent will ask for your name if you didn't include one.
+An email address is optional, so you can skip it.
+Keep in mind that neither value verifies who you are.
+The agent records whatever you type.
 
-# Review someone else's
+After the agent confirms the submission, save the expense ID it returns.
+You'll use it later to find your expense.
 
-Choose **All expenses**, click **Refresh**, and pick a pending expense you didn't submit. Then decide it:
+Now that you've filed an expense, you'll review one that belongs to someone else.
+
+## Step 3: Reviewing another attendee's expense
+
+Choose **All expenses** and click on **Refresh** to see what other attendees have submitted.
+If everyone is still typing, wait a moment and refresh again.
+
+Pick a pending expense that you didn't submit, and copy its ID.
+Then tell the agent what you decided:
 
 ```text
 Approve expense EXPENSE-ID
 ```
 
-Working alone? Submit a second expense under a different name and review that one.
+You can approve or reject it; the choice is yours.
+If the agent asks for a reviewer name, give it one.
+If someone else has already reviewed that expense, refresh and choose another pending one.
 
-# Read the Activity
+Now that you've reviewed an expense, it's time to see what the system recorded about it.
 
-Select the expense you reviewed and open **Activity**. Compare **Created by** with **Activity > Identity details > Actor ID**.
+## Step 4: Reading the Activity
 
-Created by is whatever name someone typed. Actor ID is `API key: ********`, the shared credential. A valid key proves someone holds it. It doesn't say which application or person sent the request.
+Select the expense you reviewed and open its **Activity**.
+Then find your original submission and click on **Refresh** to see whether someone has reviewed it yet.
 
-# If something breaks
+Look at both records and ask yourself two questions.
+Can you tell who submitted each expense, or who approved or rejected it?
+What connects the recorded names to the people in this room?
 
-Click [button label="Terminal" background="#444CE7"](tab-2) and restore the starter code:
+Compare **Created by** with **Activity > Identity details > Actor ID**.
+**Created by** shows the name someone supplied with the expense.
+**Actor ID** shows `API key: ********`, the shared credential that granted access.
+
+A valid shared key proves that the caller holds the key.
+That's enough to get access to the service.
+It doesn't say which application or which person sent the request.
+Expense Desk can record the name someone supplied, but a name isn't proof of identity.
+
+## Conclusion
+
+You submitted and reviewed expenses through a single shared API key, and you saw that the audit trail can't name who did what.
+Anyone holding the key can claim any name.
+
+Now that you've seen the problem, you'll start fixing it.
+In Exercise 02, you'll register your agent with Keycard and give it an identity of its own.
+
+## If you fall behind
+
+If your Expense Desk stops working, you can restore this exercise's code.
+Click on the [button label="Terminal" background="#444CE7"](tab-2) tab and type the following command:
 
 ```bash,run
-uv run --locked --project agent python checkpoints/restore.py 01 && workshop-services restart
+uv run --locked --project agent python checkpoints/restore.py 01
 ```
 
-Logs live in `/tmp/workshop/mcp.log` and `/tmp/workshop/web.log`.
+This restores the Exercise 01 versions of the authentication files.
+It leaves your `.env` files alone.
 
-Click **Check** when you can say why the audit trail can't name the approver.
+Next, restart the MCP server and Expense Desk so they load the restored code:
+
+```bash,run
+workshop-services restart
+```
+
+The `workshop-services` command manages both processes in your sandbox.
+It replaces the two terminals you'd use to start them on your own machine.
+
+Checkpoints restore code, but they don't undo expenses.
+If the problem continues, ask an instructor for help.
