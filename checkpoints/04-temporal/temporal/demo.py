@@ -71,12 +71,14 @@ class SettlementWorkflow:
     async def run(self, amount: int) -> SettlementResult:
         opts = dict(
             start_to_close_timeout=timedelta(minutes=2),
-            retry_policy=RetryPolicy(maximum_interval=timedelta(seconds=2), maximum_attempts=3,
+            # Unlimited attempts: a transient failure never ends the demo. Permanent
+            # Keycard errors still fail fast because the SDK marks them non-retryable.
+            retry_policy=RetryPolicy(maximum_interval=timedelta(seconds=2),
                                      non_retryable_error_types=["GrantConfigurationError"]),
         )
         debit = await workflow.execute_activity(debit_ledger, amount, **opts)
         # A durable timer gives the room a restart window after debit completion is recorded.
-        await workflow.sleep(30)
+        await workflow.sleep(timedelta(seconds=60))
         settle = await workflow.execute_activity(mark_settled, amount, **opts)
         return {"debit": debit, "settle": settle}
 

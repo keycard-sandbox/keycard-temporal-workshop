@@ -7,4 +7,4 @@ if [ ! -f /root/workshop/temporal/demo.py ]; then
     exit 1
 fi
 pkill -f "demo.py worker" || true
-temporal operator namespace describe -n workshop-local --address 127.0.0.1:7233 >/dev/null
+temporal operator namespace describe -n default --address 127.0.0.1:7233 >/dev/null

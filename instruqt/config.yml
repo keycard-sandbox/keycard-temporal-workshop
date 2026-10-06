@@ -1,21 +1,16 @@
 version: "3"
 containers:
 - name: workshop
-  # Publish :latest and make the GHCR package public before pushing this track.
   image: ghcr.io/keycardai/keycard-temporal-workshop-sandbox:latest
   shell: /bin/bash
   memory: 4096
   ports:
   - 8400   # Expense Desk preview (Caddy forwards to 127.0.0.1:8400)
   - 8233   # Temporal UI
-# TEMP(tmp.md): secrets are commented out because `instruqt track push` fails
-# unless each one exists in the temporal team's settings. Uncomment once they do.
-# Values are set in the Instruqt web UI. They reach lifecycle scripts only;
-# track_scripts/setup-workshop writes them into the .env files.
-# secrets:
-# - name: KEYCARD_WORKSHOP_LLM_API_KEY
-# - name: KEYCARD_WORKSHOP_LEDGER_API_KEY
-# - name: KEYCARD_WORKSHOP_MCP_CLIENT_ID
-# - name: KEYCARD_WORKSHOP_MCP_CLIENT_SECRET
-# - name: KEYCARD_WORKSHOP_WORKER_CLIENT_ID
-# - name: KEYCARD_WORKSHOP_WORKER_CLIENT_SECRET
+# Values are set in the Instruqt team settings (`instruqt secrets`). They reach
+# lifecycle scripts only; track_scripts/setup-workshop writes them into the .env files.
+secrets:
+- name: KEYCARD_WORKSHOP_LLM_API_KEY
+- name: KEYCARD_WORKSHOP_LEDGER_API_KEY
+- name: KEYCARD_WORKSHOP_MCP_CLIENT_ID
+- name: KEYCARD_WORKSHOP_MCP_CLIENT_SECRET

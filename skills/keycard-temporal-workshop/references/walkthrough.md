@@ -27,7 +27,7 @@ Use the settlement directory resolved for this layout. Run the supplied `uv run 
 
 On a shared Temporal service, confirm that the attendee has a unique settlement task queue with only their worker polling it; otherwise use the instructor’s single-worker demonstration. Another worker on the same queue can invalidate the interruption exercise.
 
-Wait for `ActivityTaskCompleted` for debit and `TimerStarted`, then stop only the worker during the 30-second timer. Leave it stopped until the timer expires and restart the same worker on the same namespace and queue. Don't start a new workflow to recover the old one. If the attendee missed the window, explain that repeating the demonstration requires a new run.
+Wait for `ActivityTaskCompleted` for debit and `TimerStarted`, then stop only the worker during the 60-second timer. Leave it stopped until the timer expires and restart the same worker on the same namespace and queue. Don't start a new workflow to recover the old one. If the attendee missed the window, explain that repeating the demonstration requires a new run.
 
 Run `uv run --locked --env-file .env check_history.py <workflow-id>`. The scanner detects JWT shapes; its success does not prove the absence of every secret format. Inspect inputs, results, headers, and failures without copying raw history into chat. Correlate Keycard issuance using time and worker identity; a Temporal workflow ID is not necessarily a Keycard request ID.
 

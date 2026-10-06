@@ -11,9 +11,6 @@ WORKSHOP=/root/workshop
 ISSUER=https://ho0llbxj2o7enn7l48tuzic25t.keycard.cloud
 ORIGIN="https://workshop-8400-${INSTRUQT_PARTICIPANT_ID:-local}.env.play.instruqt.com"
 
-# TEMP(tmp.md): the three MCP values below default to `test-placeholder` so
-# Expense Desk starts without the real secrets. Restore the defaults to empty
-# (`:-}`) once the workshop secrets are set in Instruqt.
 # Preserve existing files so a re-run never wipes Exercise 02 registration.
 if [ ! -f "$WORKSHOP/agent/.env" ]; then
     cat > "$WORKSHOP/agent/.env" <<EOF
@@ -35,23 +32,24 @@ fi
 if [ ! -f "$WORKSHOP/mcp-server/.env" ]; then
     cat > "$WORKSHOP/mcp-server/.env" <<EOF
 LEDGER_URL=https://workshop-ledger-api.fly.dev
-LEDGER_API_KEY=${KEYCARD_WORKSHOP_LEDGER_API_KEY:-test-placeholder}
+LEDGER_API_KEY=${KEYCARD_WORKSHOP_LEDGER_API_KEY:-}
 KEYCARD_ISSUER=${ISSUER}
-MCP_CLIENT_ID=${KEYCARD_WORKSHOP_MCP_CLIENT_ID:-test-placeholder}
-MCP_CLIENT_SECRET=${KEYCARD_WORKSHOP_MCP_CLIENT_SECRET:-test-placeholder}
+MCP_CLIENT_ID=${KEYCARD_WORKSHOP_MCP_CLIENT_ID:-}
+MCP_CLIENT_SECRET=${KEYCARD_WORKSHOP_MCP_CLIENT_SECRET:-}
 EOF
 fi
 
 # Exercise 04. Each sandbox has its own Temporal server, so the queue name
-# from docs/06-temporal-local.md is safe to share.
+# from docs/06-temporal-local.md is safe to share. The instructors hand out
+# the Temporal Worker credentials during the workshop; attendees fill them in.
 if [ -d "$WORKSHOP/temporal" ] && [ ! -f "$WORKSHOP/temporal/.env" ]; then
     cat > "$WORKSHOP/temporal/.env" <<EOF
 TEMPORAL_ADDRESS=127.0.0.1:7233
-TEMPORAL_NAMESPACE=workshop-local
-TEMPORAL_TASK_QUEUE=settlement-local
+TEMPORAL_NAMESPACE=default
+TEMPORAL_TASK_QUEUE=keycard-temporal-demo
 KEYCARD_ISSUER=${ISSUER}
-WORKER_KEYCARD_CLIENT_ID=${KEYCARD_WORKSHOP_WORKER_CLIENT_ID:-}
-WORKER_KEYCARD_CLIENT_SECRET=${KEYCARD_WORKSHOP_WORKER_CLIENT_SECRET:-}
+WORKER_KEYCARD_CLIENT_ID=
+WORKER_KEYCARD_CLIENT_SECRET=
 LEDGER_RESOURCE=urn:ledger:api
 EOF
 fi
@@ -61,13 +59,12 @@ echo "${ORIGIN}/callback" > "$WORKSHOP/CALLBACK_URL.txt"
 
 nohup temporal server start-dev \
     --ip 0.0.0.0 \
-    --namespace workshop-local \
     --db-filename /root/temporal.db \
     --log-level warn \
     > /tmp/temporal-server.log 2>&1 &
 
 temporal_ready() {
-    temporal operator namespace describe -n workshop-local --address 127.0.0.1:7233 >/dev/null 2>&1
+    temporal operator namespace describe -n default --address 127.0.0.1:7233 >/dev/null 2>&1
 }
 for _ in $(seq 1 60); do
     temporal_ready && break
