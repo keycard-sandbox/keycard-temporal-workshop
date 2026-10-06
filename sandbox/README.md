@@ -29,7 +29,8 @@ Set these in the Instruqt web UI. They reach lifecycle scripts only, and setup w
 | `KEYCARD_WORKSHOP_LLM_API_KEY` | `agent/.env` `LLM_API_KEY` |
 | `KEYCARD_WORKSHOP_LEDGER_API_KEY` | `mcp-server/.env` `LEDGER_API_KEY` |
 | `KEYCARD_WORKSHOP_MCP_CLIENT_ID`, `KEYCARD_WORKSHOP_MCP_CLIENT_SECRET` | `mcp-server/.env` |
-| `KEYCARD_WORKSHOP_WORKER_CLIENT_ID`, `KEYCARD_WORKSHOP_WORKER_CLIENT_SECRET` | `temporal/.env` |
+
+The Temporal Worker credentials aren't Instruqt secrets. The instructors hand them out during Exercise 04, and attendees add `WORKER_KEYCARD_CLIENT_ID` and `WORKER_KEYCARD_CLIENT_SECRET` to `temporal/.env` themselves.
 
 Blank secrets don't stop the sandbox. Setup writes empty values, warns that Expense Desk isn't running, and leaves Temporal, the editor and the terminals up. Fill in the values and run `workshop-services start`.
 

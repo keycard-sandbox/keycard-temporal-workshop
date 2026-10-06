@@ -140,15 +140,29 @@ Now that you've seen the code, you'll start the Worker.
 
 ## Step 2: Starting the Worker
 
-Click on the [button label="Worker" background="#444CE7"](tab-1) tab and type the following command:
+The Worker needs its own Keycard credentials before it can start.
+The instructors will share the client ID and secret for the **Temporal Worker** application.
+
+Open `temporal/.env` in the [button label="Editor" background="#444CE7"](tab-3) tab and set these two lines:
+
+```dotenv,nocopy
+WORKER_KEYCARD_CLIENT_ID=WORKER-CLIENT-ID
+WORKER_KEYCARD_CLIENT_SECRET=WORKER-CLIENT-SECRET
+```
+
+Leave the other lines alone; your sandbox already filled them in.
+Save the file.
+
+**Note:** Keep the secret in `.env`. Don't paste it into chat, a screenshot, or a commit.
+
+With the credentials in place, click on the [button label="Worker" background="#444CE7"](tab-1) tab and type the following command:
 
 ```bash,run
 uv run --locked --env-file .env demo.py worker
 ```
 
 The `--locked` flag runs the code with the exact package versions from the lockfile.
-The `--env-file .env` flag loads the Worker's settings from `temporal/.env`.
-Your sandbox wrote the Temporal Worker credentials there.
+The `--env-file .env` flag loads the Worker's settings from `temporal/.env`, including the credentials you just added.
 The `worker` argument tells `demo.py` to start a Worker.
 
 You should see a line like this one:
