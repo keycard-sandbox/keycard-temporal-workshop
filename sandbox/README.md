@@ -4,7 +4,7 @@ This repository's root is the generated attendee package. It's mirrored from the
 
 ## What the sandbox runs
 
-One container, hostname `workshop`. The image bakes the attendee package at `/root/workshop` with synced uv environments and a Temporal dev-server database that already has the `workshop-local` namespace. Track setup writes the `.env` files from Instruqt secrets, then starts:
+One container, hostname `workshop`. The image bakes the attendee package at `/root/workshop` with synced uv environments and a warmed Temporal dev-server database for the `default` namespace. Track setup writes the `.env` files from Instruqt secrets, then starts:
 
 | Process | Address | Reached through |
 | --- | --- | --- |

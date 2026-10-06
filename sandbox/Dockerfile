@@ -42,22 +42,21 @@ RUN uv sync --locked --python /usr/local/bin/python3.13 --project agent \
     && uv sync --locked --python /usr/local/bin/python3.13 --project mcp-server \
     && uv sync --locked --python /usr/local/bin/python3.13 --project temporal
 
-# Bake the dev server DB with the workshop namespace so lab start only
+# Bake the dev server DB for the default namespace so lab start only
 # launches the server. Pattern from temporal-sa/instruqt-tracks.
 RUN temporal server start-dev --headless \
       --db-filename /root/temporal.db \
-      --namespace workshop-local \
       --log-level error > /tmp/build-server.log 2>&1 & \
     for i in $(seq 1 120); do \
-      temporal operator namespace describe -n workshop-local --address 127.0.0.1:7233 >/dev/null 2>&1 && break; \
+      temporal operator namespace describe -n default --address 127.0.0.1:7233 >/dev/null 2>&1 && break; \
       sleep 0.5; \
     done \
-    && temporal operator namespace describe -n workshop-local --address 127.0.0.1:7233 >/dev/null \
+    && temporal operator namespace describe -n default --address 127.0.0.1:7233 >/dev/null \
     && pkill -INT -x temporal \
     && for i in $(seq 1 40); do pgrep -x temporal >/dev/null || break; sleep 0.25; done
 
 RUN echo 'export TEMPORAL_ADDRESS="${TEMPORAL_ADDRESS:-127.0.0.1:7233}"' >> /root/.bashrc \
-    && echo 'export TEMPORAL_NAMESPACE=workshop-local' >> /root/.bashrc \
+    && echo 'export TEMPORAL_NAMESPACE=default' >> /root/.bashrc \
     && echo 'cd /root/workshop 2>/dev/null || true' >> /root/.bashrc
 
 WORKDIR /root

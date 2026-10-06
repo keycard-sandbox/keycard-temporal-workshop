@@ -45,8 +45,8 @@ fi
 if [ -d "$WORKSHOP/temporal" ] && [ ! -f "$WORKSHOP/temporal/.env" ]; then
     cat > "$WORKSHOP/temporal/.env" <<EOF
 TEMPORAL_ADDRESS=127.0.0.1:7233
-TEMPORAL_NAMESPACE=workshop-local
-TEMPORAL_TASK_QUEUE=settlement-local
+TEMPORAL_NAMESPACE=default
+TEMPORAL_TASK_QUEUE=keycard-temporal-demo
 KEYCARD_ISSUER=${ISSUER}
 WORKER_KEYCARD_CLIENT_ID=
 WORKER_KEYCARD_CLIENT_SECRET=
@@ -59,13 +59,12 @@ echo "${ORIGIN}/callback" > "$WORKSHOP/CALLBACK_URL.txt"
 
 nohup temporal server start-dev \
     --ip 0.0.0.0 \
-    --namespace workshop-local \
     --db-filename /root/temporal.db \
     --log-level warn \
     > /tmp/temporal-server.log 2>&1 &
 
 temporal_ready() {
-    temporal operator namespace describe -n workshop-local --address 127.0.0.1:7233 >/dev/null 2>&1
+    temporal operator namespace describe -n default --address 127.0.0.1:7233 >/dev/null 2>&1
 }
 for _ in $(seq 1 60); do
     temporal_ready && break

@@ -24,7 +24,7 @@ owner: temporal
 developers:
 - mason.egger@temporal.io
 idle_timeout: 1800
-timelimit: 4500
+timelimit: 6000
 lab_config:
   extend_ttl: 900
   sidebar_enabled: true
@@ -47,5 +47,5 @@ lab_config:
   hideStopButton: false
   default_layout: AssignmentLeft
   default_layout_sidebar_size: 33
-checksum: "130458917112962844"
+checksum: "8268515514449862855"
 enhanced_loading: false

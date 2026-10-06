@@ -5,7 +5,7 @@ You'll stop a worker after Temporal records a completed activity, then restart i
 
 ## Before you start
 
-This exercise is part of the full workshop. Skip it if your session ends after Exercise 03. If your instructor has not supplied a running Temporal service and you are rehearsing locally, follow [local Temporal setup](06-temporal-local.md) before this exercise.
+This exercise is part of the full workshop. If your instructor has not supplied a running Temporal service and you are rehearsing locally, follow [local Temporal setup](06-temporal-local.md) before this exercise.
 
 Use the Temporal service, UI link, namespace, and settlement task queue your instructor supplies. If you followed the local setup guide, use your local values instead. Keep the same configuration when you restart the worker so it resumes the original workflow. The settlement worker is the Python process you start in this exercise. It polls that queue for work and runs the workflow and its activities, while Temporal records progress independently.
 
@@ -36,7 +36,7 @@ During the interruption, stop only the worker. Leave the Temporal service runnin
 ## Stop and restart the worker
 
 1. Wait for the debit activity's **ActivityTaskCompleted** event and **TimerStarted**.
-2. During the 30-second timer, press Control-C in the worker terminal. Leave the workflow's second terminal open.
+2. During the 60-second timer, press Control-C in the worker terminal. Leave the workflow's second terminal open.
 3. Keep the worker stopped until the timer expires.
 4. Restart the same worker command on the same namespace and task queue. Don't run `demo.py run` again.
 5. Confirm that the original workflow completes. The debit should have one completed execution, followed by settlement after the restart.
