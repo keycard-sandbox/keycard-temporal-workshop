@@ -63,7 +63,7 @@ Which account am I using, and what is my approval limit?
 
 You should see your signed-in email this time instead of the application from Exercise 02.
 
-Choose **All expenses**, then select the expense ID you saved in Exercise 02 and open its **Activity**.
+Choose **All expenses**, then select the expense ID you saved in Exercise 02 and look at the **Activity** section in its details panel.
 That expense still belongs to the application that created it.
 Signing in doesn't change who created earlier expenses.
 
@@ -115,7 +115,7 @@ The button sends `Approve expense EXPENSE-ID` through the same agent conversatio
 After your partner decides your expense, click on **Refresh** to see their decision.
 Your own chat refreshes your view after each turn, but it won't show your partner's changes until you refresh.
 
-Open the expense's **Activity** and compare **Created by** with the actor who decided it.
+In the expense's **Activity** section, compare **Created by** with the actor who decided it.
 Expand **Identity details** to see the full actor ID.
 Partner approval should succeed, and self-approval should fail with a reason.
 

@@ -98,16 +98,17 @@ If someone else has already reviewed that expense, refresh and choose another pe
 
 Now that you've reviewed an expense, it's time to see what the system recorded about it.
 
-## Step 4: Reading the Activity
+## Step 4: Reading the expense history
 
-Select the expense you reviewed and open its **Activity**.
+In Expense Desk, select the expense you reviewed.
+Its details panel has an **Activity** section, which records every action taken on that expense.
 Then find your original submission and click on **Refresh** to see whether someone has reviewed it yet.
 
 Look at both records and ask yourself two questions.
 Can you tell who submitted each expense, or who approved or rejected it?
 What connects the recorded names to the people in this room?
 
-Compare **Created by** with **Activity > Identity details > Actor ID**.
+In that panel, compare **Created by** with **Activity > Identity details > Actor ID**.
 **Created by** shows the name someone supplied with the expense.
 **Actor ID** shows `API key: ********`, the shared credential that granted access.
 

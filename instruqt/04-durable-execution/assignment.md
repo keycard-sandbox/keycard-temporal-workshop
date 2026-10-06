@@ -259,6 +259,7 @@ You'll see amounts and results, but never a token.
 
 Finally, look at the same run from Keycard's side.
 In the [button label="Keycard" background="#444CE7"](tab-4) tab, open **Applications > Temporal Worker > Activity**.
+This **Activity** tab is Keycard's log of credential requests, not a Temporal Activity.
 Find the Ledger API credential issued before you stopped the Worker, and the one issued after you restarted it.
 Use your run times to tell them apart, and ask an instructor if several attendees' events look alike.
 

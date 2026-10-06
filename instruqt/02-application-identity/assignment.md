@@ -100,6 +100,8 @@ Those two registrations describe one running server.
 
 Open **Agent App - Example** and **Agent Resource - Example** to preview what you're about to create.
 Each application, resource, and provider opens on its **Activity** tab, where you can see credential requests.
+This is Keycard's record of who asked for which credential.
+It's separate from the **Activity** section on each expense in Expense Desk, which records what happened to that expense.
 The gear icon in the upper right shows settings such as name and identifier.
 
 You'll also see **Temporal Worker** with the identifier `urn:keycard:temporal:worker`.
@@ -157,7 +159,7 @@ Create the application.
 
 Keep the `urn:agent:app:` prefix exactly as shown.
 The workshop's shared Ledger API policy matches on that prefix.
-The application name also keeps software apart from people in Activity.
+The application name also keeps software apart from people in Keycard's Activity.
 
 Now that the application exists, you'll create the resource it provides.
 
