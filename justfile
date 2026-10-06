@@ -1,7 +1,7 @@
 # ABOUTME: Instruqt track and sandbox image helpers. Run from anywhere in the repo.
 # Requires the Instruqt CLI; authenticate once with `instruqt auth login`.
 
-IMAGE := "ghcr.io/keycard-sandbox/keycard-temporal-workshop-sandbox"
+IMAGE := "ghcr.io/keycardai/keycard-temporal-workshop-sandbox"
 
 default:
     @just --list
