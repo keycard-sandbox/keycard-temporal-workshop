@@ -30,7 +30,7 @@ Your Expense Desk agent has both roles. When you sign in, it receives a token ad
 
 Now follow the request one step further. The MCP server receives the token addressed to **Expense MCP Resource**, then authenticates as **Expense MCP Actor** to exchange it for a Ledger API token. These registrations describe the same running server: it receives requests from your agent and makes requests to Ledger API. Your instructors have configured both registrations.
 
-You'll also see **Temporal Worker** (`urn:keycard:temporal:worker`). The instructor manages it; leave that registration unchanged.
+The **Temporal Worker** application identifies the background program that runs jobs assigned by Temporal. Temporal tracks the job’s progress, and the worker uses Keycard to obtain credentials for Ledger API when it needs access. The instructors manage this registration, so leave it unchanged.
 
 ## Create your application
 

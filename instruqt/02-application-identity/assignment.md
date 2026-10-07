@@ -104,8 +104,7 @@ This is Keycard's record of who asked for which credential.
 It's separate from the **Activity** section on each expense in Expense Desk, which records what happened to that expense.
 The gear icon in the upper right shows settings such as name and identifier.
 
-You'll also see **Temporal Worker** with the identifier `urn:keycard:temporal:worker`.
-The instructors manage it for Exercise 04, so leave it unchanged.
+The **Temporal Worker** application identifies the background program that runs jobs assigned by Temporal. Temporal tracks the job’s progress, and the worker uses Keycard to obtain credentials for Ledger API when it needs access. The instructors manage this registration, so leave it unchanged.
 
 Now that you know your way around, you'll find the one value that's specific to your sandbox.
 

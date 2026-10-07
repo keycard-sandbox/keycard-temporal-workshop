@@ -28,7 +28,7 @@ Provides means the application may continue a chain from access tokens addressed
 
 **Expense MCP Actor** is the application registration of the MCP server, named for its role as the caller in the onward exchange. **Expense MCP Resource** is the destination for the agent's incoming token. The same running MCP server receives one token and authenticates as its application to exchange it for a Ledger API token.
 
-You'll also see **Temporal Worker** (`urn:keycard:temporal:worker`). It identifies the Temporal worker when an activity obtains a Ledger API credential, including after a worker restart. It acts as itself in the supplied demonstration. The instructor supplies its configuration; you don't create, modify, or add dependencies to it.
+The **Temporal Worker** application identifies the background program that runs jobs assigned by Temporal. Temporal tracks the job’s progress, and the worker uses Keycard to obtain credentials for Ledger API when it needs access. The instructors manage this registration, so leave it unchanged.
 
 Leave **Proxy MCP tools** off. That option creates a gateway that exposes tools from upstream MCP servers through one generated endpoint. Here Expense Desk calls the supplied Expense MCP endpoint directly; its SDK authentication and onward Ledger API exchange are the behavior you are learning. See [Proxy MCP Tools](https://docs.keycard.ai/admin/unified-access-gateway/).
 
