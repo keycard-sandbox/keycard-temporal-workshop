@@ -7,11 +7,11 @@ You'll stop a worker after Temporal records a completed activity, then restart i
 
 This exercise is part of the full workshop. If your instructor has not supplied a running Temporal service and you are rehearsing locally, follow [local Temporal setup](06-temporal-local.md) before this exercise.
 
-Use the Temporal service, UI link, namespace, and settlement task queue your instructor supplies. If you followed the local setup guide, use your local values instead. Keep the same configuration when you restart the worker so it resumes the original workflow. The settlement worker is the Python process you start in this exercise. It polls that queue for work and runs the workflow and its activities, while Temporal records progress independently.
+For local use, use `TEMPORAL_ADDRESS=localhost:7233`, `TEMPORAL_NAMESPACE=default`, and [Temporal UI](http://localhost:8233). Each isolated server uses `TEMPORAL_TASK_QUEUE=keycard-temporal-demo`. In Instruqt, preserve the supplied `.env`: address `127.0.0.1:7233`, namespace `default`, and queue `keycard-temporal-demo`; open the Temporal UI tab. Keep the same configuration when you restart the worker so it resumes the original workflow. The Temporal worker is the Python process you start in this exercise. It polls that queue for work and runs the workflow and its activities, while Temporal records progress independently.
 
 The worker uses the instructor-supplied **Temporal Worker** application, which has access to the Ledger API resource. Its credentials are in `temporal/.env` as `WORKER_KEYCARD_CLIENT_ID` and `WORKER_KEYCARD_CLIENT_SECRET`. The worker acts as itself and doesn't need your browser sign-in.
 
-For individual restart rehearsals on a shared Temporal service, use the unique settlement task queue assigned to you by the instructor and confirm that only your worker polls it. Another worker on the same queue can finish the workflow while yours is stopped. If the session uses one shared queue, follow the instructor’s single-worker demonstration instead.
+For individual restart rehearsals on a shared Temporal service, set `TEMPORAL_TASK_QUEUE=keycard-temporal-<githubhandle>` using your own GitHub handle and confirm that only your worker polls it. Another worker on the same queue can finish the workflow while yours is stopped. If the session uses one shared queue, follow the instructor’s single-worker demonstration instead.
 
 During the interruption, stop only the worker. Leave the Temporal service running.
 
@@ -31,7 +31,7 @@ During the interruption, stop only the worker. Leave the Temporal service runnin
    cd "<package-path>/temporal"
    uv run --locked --env-file .env demo.py run
    ```
-3. Copy the workflow ID and find it in the supplied Temporal UI and namespace.
+3. Copy the workflow ID and find it in [Temporal UI](http://localhost:8233), in the `default` namespace.
 
 ## Stop and restart the worker
 
@@ -39,9 +39,9 @@ During the interruption, stop only the worker. Leave the Temporal service runnin
 2. During the 60-second timer, press Control-C in the worker terminal. Leave the workflow's second terminal open.
 3. Keep the worker stopped until the timer expires.
 4. Restart the same worker command on the same namespace and task queue. Don't run `demo.py run` again.
-5. Confirm that the original workflow completes. The debit should have one completed execution, followed by settlement after the restart.
+5. Confirm that the original workflow completes. The debit should have one completed execution, followed by payment after the restart.
 
-With the instructor, read `SettlementWorkflow`, `debit_ledger`, `mark_settled`, and the worker's `KeycardInterceptor` configuration in `demo.py`. Temporal reuses the recorded debit result; the next activity obtains credentials when it runs.
+With the instructor, read the workflow class, `debit_ledger`, `mark_settled`, and the worker's `KeycardInterceptor` configuration in `demo.py`. Temporal reuses the recorded debit result; the next activity obtains credentials when it runs.
 
 ## Inspect credentials and history
 

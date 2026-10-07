@@ -46,7 +46,7 @@ Use your GitHub handle wherever you see `<githubhandle>`, without the angle brac
    | Name | `Expense Desk Agent - <githubhandle>` |
    | Identifier | `urn:agent:app:<githubhandle>` |
    | Consent | Implicit |
-   | Redirect URI | Your instructor-supplied Expense Desk preview origin followed by `/callback` |
+   | Redirect URI | Local: `http://localhost:8400/callback`. Instruqt: the exact URL from `CALLBACK_URL.txt`. |
 
 
    Leave **Proxy MCP tools** off. That option creates a gateway that exposes tools from upstream MCP servers through one generated endpoint. Here Expense Desk calls the supplied Expense MCP endpoint directly; its SDK authentication and onward Ledger API exchange are the behavior you are learning. See [Proxy MCP Tools](https://docs.keycard.ai/admin/unified-access-gateway/).
@@ -55,7 +55,7 @@ Use your GitHub handle wherever you see `<githubhandle>`, without the angle brac
 
 Keep the `urn:agent:app:` prefix exactly. The workshop's shared Ledger API policy matches this prefix.
 
-For local use, the redirect URI is `http://localhost:8400/callback`. For Instruqt, use your supplied HTTPS preview origin followed by `/callback`, matching `EXPENSE_DESK_ORIGIN`. The callback returns your browser to Expense Desk after sign-in.
+For local use, register `http://localhost:8400/callback`, matching `EXPENSE_DESK_ORIGIN=http://localhost:8400`. In Instruqt, run `cat CALLBACK_URL.txt` from the package root and register that exact HTTPS URL; keep the matching `EXPENSE_DESK_ORIGIN` supplied in `agent/.env`. The callback returns your browser to Expense Desk after sign-in.
 
 The application name distinguishes software from people in Activity. Keep the literal identifier prefix unchanged.
 
@@ -90,14 +90,13 @@ GitHub participates in sign-in; that is distinct from choosing who issues a reso
 
 **Provides** means "my application serves this resource." **Depends** means "my application requests credentials for this resource." These point in different directions: receiving a token does not by itself authorize every downstream call.
 
-On your application, open **Dependencies**, click **Add dependency**, and connect all four resources:
+On your application, open **Dependencies**, click **Add dependency**, and connect these three resources:
 
 | Resource | Identifier | Why your Expense Desk agent needs it |
 | --- | --- | --- |
 | Your Expense Desk agent resource | `urn:agent:resource:<githubhandle>` | Sign-in requests a subject token for this audience. |
 | Expense MCP Resource (already configured by instructor) | `http://localhost:8100/mcp` | Your Expense Desk agent calls the expense tools. |
-| OpenID Connect UserInfo (built in) | Select the zone’s built-in resource | Resolves the signed-in person’s email. |
-| LLM API resource (already configured by instructor) | The supplied `LLM_RESOURCE` (`https://api.openai.com`) | Your Expense Desk agent requests the LLM credential from Keycard's vault. |
+| LLM API resource (already configured by instructor) | `https://api.openai.com` | Your Expense Desk agent requests the LLM credential from Keycard's vault. |
 
 Your Expense Desk agent application needs two connections to its own resource:
 
@@ -131,26 +130,23 @@ Edit these fields in `agent/.env`:
 KEYCARD_CLIENT_ID=<client ID from your application credential>
 KEYCARD_CLIENT_SECRET=<client secret from application credential>
 AGENT_RESOURCE=urn:agent:resource:<githubhandle>
-EXPENSE_DESK_ORIGIN=http://localhost:8400
 ```
 
-For a hosted workshop, replace `http://localhost:8400` with your supplied Expense Desk preview origin.
+Locally, keep `EXPENSE_DESK_ORIGIN=http://localhost:8400`. In Instruqt, preserve the supplied HTTPS origin and use Expense Desk in its own window for sign-in.
 
-Keep the supplied `KEYCARD_ISSUER`, `MCP_URL`, and LLM settings. These values refer to different parts of the system:
+Keep the fixed `KEYCARD_ISSUER`, `MCP_URL`, and LLM settings from [Setup](00-setup.md#fixed-workshop-configuration). These values refer to different parts of the system:
 
 | Value | Meaning |
 | --- | --- |
-| `KEYCARD_ISSUER` | The shared workshop's Keycard issuer URL. Keep the instructor's exact value. |
+| `KEYCARD_ISSUER` | `https://ho0llbxj2o7enn7l48tuzic25t.keycard.cloud` — the shared workshop issuer. |
 | `AGENT_RESOURCE` | Your personal resource identifier, matching the console. |
-| `MCP_URL` | The MCP endpoint and registered resource identifier, including `/mcp`. |
-| `EXPENSE_DESK_ORIGIN` | The browser app's origin (where the agent displays). |
-| Application Redirect URI | The agent's origin followed by `/callback`. |
+| `MCP_URL` | `http://localhost:8100/mcp` — the endpoint and registered resource identifier. |
+| `EXPENSE_DESK_ORIGIN` | `http://localhost:8400` — the browser app origin. |
+| Application Redirect URI | `http://localhost:8400/callback`. |
 
 Identifiers and redirect URIs must match exactly. A changed port, trailing slash, or `127.0.0.1` in place of `localhost` changes the value.
 
 Zone Provider means Keycard issues credentials for your agent resource. Select the built-in Zone Provider, not the external Auth0 or GitHub provider used for human sign-in.
-
-The built-in **OpenID Connect UserInfo** dependency supplies the signed-in email; the agent and MCP resources still use Zone Provider.
 
 ## Check your registration
 
@@ -158,7 +154,7 @@ Before switching to application authentication, confirm:
 
 - Your app identifier starts with `urn:agent:app:` and uses your GitHub handle.
 - Your resource uses Zone Provider, has no scopes, and your app provides it.
-- Your app depends on your resource, Expense MCP, OpenID Connect UserInfo, and the supplied LLM resource.
+- Your app depends on your resource, Expense MCP, and the supplied LLM resource.
 - Your app has Implicit consent and the exact callback URL.
 - Your `.env` contains your own credential pair and resource identifier.
 

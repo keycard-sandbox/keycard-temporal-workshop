@@ -7,7 +7,7 @@ For local follow-along, you will run Expense Desk locally and connect it to the 
 
 For sessions covering Exercises 01–03, follow the instructions below. You don't need Temporal, Docker, a local database, or your own model API key.
 
-If dependencies are already installed in your current package folder, skip their installation. If Expense Desk is already running in a hosted environment, open its supplied preview URL; otherwise use the startup commands below.
+If dependencies are already installed in your current package folder, skip their installation. In Instruqt, use the Expense Desk tab and the track instructions; open Expense Desk in its own window for sign-in. Otherwise use the local startup commands below.
 
 ## Set up the attendee package
 
@@ -24,7 +24,23 @@ Kim supplies the attendee package and configuration privately. If the package al
 
 Keep the leading dot in `.env` and make sure your editor doesn't append `.txt`. These files contain workshop credentials, so keep their contents out of chat, screenshots, and commits. If you're still waiting on the files, you can install the dependencies first.
 
-The configuration supplies model access and the shared Ledger API service. If `KEYCARD_CLIENT_ID`, `KEYCARD_CLIENT_SECRET`, and `AGENT_RESOURCE` in `agent/.env` are blank, leave them blank until Exercise 02. Preserve existing configuration; in Exercise 02, confirm those fields identify your own registration. Keep all other supplied values.
+The configuration supplies model access and the shared Ledger API service. If `KEYCARD_CLIENT_ID`, `KEYCARD_CLIENT_SECRET`, and `AGENT_RESOURCE` in `agent/.env` are blank, leave them blank until Exercise 02. Preserve existing configuration; in Exercise 02, confirm those fields identify your own registration. Keep the fixed workshop values below and preserve privately supplied credentials.
+
+## Fixed workshop configuration
+
+The templates below are for local follow-along. In Instruqt, keep the supplied `.env` files: Expense Desk uses your sandbox’s HTTPS origin, and `CALLBACK_URL.txt` contains its matching redirect URI. Use the track’s Temporal UI tab, namespace `default`, and queue `keycard-temporal-demo`; do not replace them with local settings.
+
+| Setting | Value |
+| --- | --- |
+| Expense Desk / `EXPENSE_DESK_ORIGIN` | `http://localhost:8400` |
+| Application Redirect URI | `http://localhost:8400/callback` |
+| `MCP_URL` | `http://localhost:8100/mcp` |
+| `KEYCARD_ISSUER` | `https://ho0llbxj2o7enn7l48tuzic25t.keycard.cloud` |
+| `LLM_PROVIDER` / `LLM_MODEL` | `openai` / `gpt-5.4-mini` |
+| `LLM_RESOURCE` | `https://api.openai.com` |
+| MCP `LEDGER_URL` | `https://workshop-ledger-api.fly.dev` |
+
+Leave `LLM_BASE_URL` and `LLM_WORKSPACE_ID` empty for the workshop's OpenAI configuration. Kim supplies private model and shared-service credentials. You create your own agent credentials and `AGENT_RESOURCE` in Exercise 02. The shared Ledger API remains remote.
 
 ## Install uv
 
@@ -70,7 +86,7 @@ If you're using Windows, contact Kim before the session. Some later exercises us
 
 The package includes `skills/keycard-temporal-workshop/`, a companion that helps your local coding agent explain the workshop and troubleshoot exercises. Your coding agent is separate from the expense agent in Expense Desk.
 
-Install the skill for the coding agent you use. Run the commands from the package folder that contains `agent/`, `mcp-server/`, and `skills/`. Copy the whole skill folder so its references and configuration checker stay together.
+Install the skill for the coding agent you use. Run the commands from the package folder that contains `agent/`, `mcp-server/`, and `skills/`. The `skills/` directory is inside this package folder, so use `./skills/`, without a parent-directory (`../`) prefix. Copy the whole skill folder so its references and configuration checker stay together.
 
 ### Codex
 
@@ -79,7 +95,7 @@ Install into the workshop folder:
 ```sh
 cd "<package-path>"
 mkdir -p .agents/skills/keycard-temporal-workshop
-cp -R skills/keycard-temporal-workshop/. .agents/skills/keycard-temporal-workshop/
+cp -R ./skills/keycard-temporal-workshop/. .agents/skills/keycard-temporal-workshop/
 ```
 
 Open the package folder in Codex. If the skill doesn't appear, restart Codex, then start a new task and enter:
@@ -97,7 +113,7 @@ Install into the workshop folder:
 ```sh
 cd "<package-path>"
 mkdir -p .claude/skills/keycard-temporal-workshop
-cp -R skills/keycard-temporal-workshop/. .claude/skills/keycard-temporal-workshop/
+cp -R ./skills/keycard-temporal-workshop/. .claude/skills/keycard-temporal-workshop/
 ```
 
 Start Claude Code in the package folder, then enter:
@@ -139,7 +155,7 @@ The MCP server connects to the shared Ledger API service. Expense Desk runs sepa
    uv run --locked --project agent python agent/web.py
    ```
 
-4. Open [Expense Desk](http://localhost:8400) locally, or use the preview URL your instructor supplied.
+4. Open [Expense Desk](http://localhost:8400). In Instruqt, use the Expense Desk tab instead.
 
 Once you can open Expense Desk, let Kim know you're ready and wait for the session to begin Exercise 01. You'll join Keycard and register your agent in Exercise 02.
 

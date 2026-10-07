@@ -23,15 +23,15 @@ For Exercise 02, choose **Continue as Expense Desk Agent** in the browser to dem
 
 ## Recover the same Temporal workflow
 
-Use the settlement directory resolved for this layout. Run the supplied `uv run --locked --env-file .env demo.py worker` and, separately, `uv run --locked --env-file .env demo.py run`. Record the workflow ID, namespace, and queue without printing credentials.
+Use the `temporal/` directory resolved for this layout. Run the supplied `uv run --locked --env-file .env demo.py worker` and, separately, `uv run --locked --env-file .env demo.py run`. Record the workflow ID, namespace, and queue without printing credentials.
 
-On a shared Temporal service, confirm that the attendee has a unique settlement task queue with only their worker polling it; otherwise use the instructor’s single-worker demonstration. Another worker on the same queue can invalidate the interruption exercise.
+On a shared Temporal service, use `TEMPORAL_NAMESPACE=default` and confirm that the attendee has a unique workflow task queue with only their worker polling it; otherwise use the instructor’s single-worker demonstration. Another worker on the same queue can invalidate the interruption exercise.
 
 Wait for `ActivityTaskCompleted` for debit and `TimerStarted`, then stop only the worker during the 60-second timer. Leave it stopped until the timer expires and restart the same worker on the same namespace and queue. Don't start a new workflow to recover the old one. If the attendee missed the window, explain that repeating the demonstration requires a new run.
 
 Run `uv run --locked --env-file .env check_history.py <workflow-id>`. The scanner detects JWT shapes; its success does not prove the absence of every secret format. Inspect inputs, results, headers, and failures without copying raw history into chat. Correlate Keycard issuance using time and worker identity; a Temporal workflow ID is not necessarily a Keycard request ID.
 
-The demo acquires real credentials but simulates debit and settlement. It creates no real payments or Expense Desk payment entries. Temporal reuses a recorded activity result; an external payment that commits before its activity result is recorded still needs an API-side idempotency key or reconciliation.
+The demo acquires real credentials but simulates debit and payment. It creates no real payments or Expense Desk payment entries. Temporal reuses a recorded activity result; an external payment that commits before its activity result is recorded still needs an API-side idempotency key or reconciliation.
 
 ## Trace without mixing attendees
 
@@ -40,3 +40,5 @@ Follow the exact filter sequence in Exercise 03: attendee application's Activity
 Exercise 02 starts with client credentials, not a user session. Inspect the attendee's own application feed; use the instructor-led shared MCP hop demonstration. Don't invent an email filter for an application subject or assume shared actor filtering isolates attendees. If UI labels or matching behavior differ, capture a redacted instructor handoff instead of guessing.
 
 The authenticated Expense Desk agent uses its account identity and never asks for a submission name or email. It reports identity lookup failures instead of substituting a supplied name. It keeps credentials and identity-verification explanations out of its conversation. Use the exercise guide and Activity inspection to teach those concepts.
+
+For an explicit approval request naming an existing expense, preserve the current user’s delegated identity regardless of amount. The application identity is used only for autonomous approval of an eligible expense newly submitted in the same turn. Do not suggest switching identity to work around a refusal.

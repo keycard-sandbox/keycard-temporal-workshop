@@ -101,7 +101,7 @@ def inspect(root, stage, starter=False):
             for key in ("TEMPORAL_ADDRESS", "TEMPORAL_NAMESPACE", "TEMPORAL_TASK_QUEUE")
         }
         result["limitations"].append(
-            "Confirm Temporal address, namespace, and queue against the instructor's settings; defaults may target a different room."
+            "Local defaults: localhost:7233, namespace default, queue keycard-temporal-demo. Instruqt supplies namespace default and queue keycard-temporal-demo. Preserve effective settings and ensure only your worker polls the demo queue."
         )
         for key in result["temporal_settings"]:
             if key in values:

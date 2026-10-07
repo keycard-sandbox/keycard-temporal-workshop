@@ -16,7 +16,7 @@ If sign-in succeeds but tools fail, check [consent errors](07-troubleshooting.md
 ## Approve your partner's expense
 
 1. File a new $75 expense with a memo of your choosing, for example, `Printer paper and toner for the workshop`.
-2. File a second expense under $50, for example, “Submit $30 for office supplies for our team.” Your agent approves it in the same conversation. Read the confirmation: Created by is you, Decided by is your agent.
+2. File a second expense under $50, for example, “Submit $30 for office supplies for our team.” Wait for your agent to approve it in the same conversation turn. Stay signed in; don't click Approve or send an approval request. Read the confirmation and inspect the expense: Created by is you, Decided by is your agent acting under its own application identity. If the expense remains pending, report the result to your instructor; a manual approval wouldn't demonstrate autonomous approval.
 3. Ask to approve your own pending $75 expense by its ID, for example "Approve expense <your id>". Read the explanation that approving your own expense is not allowed. Expense Desk checks expense ownership and enforces this restriction.
 4. Exchange expense IDs with a partner.
 5. Choose **All expenses**, select your partner's pending expense, and click **Approve**. This sends “Approve expense <id>” through the same agent conversation; you can also type that request.
@@ -54,3 +54,5 @@ uv run --locked --project agent python checkpoints/restore.py 03
 Then restart MCP and the browser, and sign in again. Create fresh expenses if someone already decided the previous ones. If sign-in remains blocked, follow the instructor's paired demonstration.
 
 The supplied browser already uses Keycard's SDK. For ambiguous searches and more policy examples, see the [take-home exercises](05-take-home.md).
+
+When you explicitly ask to approve an existing expense by ID, Expense Desk acts on your behalf, including for amounts under $50. The separate automatic approval uses the agent’s application identity only for an eligible expense submitted in that same turn.

@@ -20,7 +20,7 @@ MCP also has both registrations because it receives agent requests and calls Led
 | Expense MCP | Exchanges the incoming token for Ledger API access | `http://localhost:8100/mcp` receives agent calls | Instructor |
 | Ledger API | No onward exchange is required in this workshop | `urn:ledger:api` identifies the final API | Instructor |
 | Model API | The agent requests its credential | Supplied `LLM_RESOURCE` identifies a vault-backed credential target | Instructor |
-| Settlement worker | Requests Ledger API credentials inside activities | The required app-only demo does not need a user-session anchor | Instructor |
+| Temporal worker | Requests Ledger API credentials inside activities | The required app-only demo does not need a user-session anchor | Instructor |
 
 Avoid teaching that every API or application always needs both. The pairing matters here because the agent and MCP continue a delegation chain. Ledger API ends the chain.
 
@@ -28,7 +28,7 @@ Provides means the application may continue a chain from access tokens addressed
 
 **Expense MCP Actor** is the application registration of the MCP server, named for its role as the caller in the onward exchange. **Expense MCP Resource** is the destination for the agent's incoming token. The same running MCP server receives one token and authenticates as its application to exchange it for a Ledger API token.
 
-You'll also see **Temporal Worker** (`urn:keycard:temporal:worker`). It identifies the settlement worker when an activity obtains a Ledger API credential, including after a worker restart. It acts as itself in the supplied demonstration. The instructor supplies its configuration; you don't create, modify, or add dependencies to it.
+You'll also see **Temporal Worker** (`urn:keycard:temporal:worker`). It identifies the Temporal worker when an activity obtains a Ledger API credential, including after a worker restart. It acts as itself in the supplied demonstration. The instructor supplies its configuration; you don't create, modify, or add dependencies to it.
 
 Leave **Proxy MCP tools** off. That option creates a gateway that exposes tools from upstream MCP servers through one generated endpoint. Here Expense Desk calls the supplied Expense MCP endpoint directly; its SDK authentication and onward Ledger API exchange are the behavior you are learning. See [Proxy MCP Tools](https://docs.keycard.ai/admin/unified-access-gateway/).
 
@@ -68,7 +68,7 @@ An external OAuth credential provider serves another purpose: Keycard can broker
 
 The model resource uses a vault-backed credential. The resource identifier names what the agent requests; the credential can be an API key rather than a Keycard JWT. Keep the instructor's model-resource setting and let the supplied SDK integration obtain it.
 
-Two callbacks can exist in a federated sign-in: the upstream provider returns to Keycard; Keycard returns to Expense Desk at its registered `/callback`. The agent's preview callback belongs in its application registration. It does not replace the upstream provider's redirect URL. See [Keycard providers](https://docs.keycard.ai/concepts/providers/) for identity and access federation.
+Two callbacks can exist in a federated sign-in: the upstream provider returns to Keycard; Keycard returns to Expense Desk at its registered `/callback`. The agent's environment-specific callback belongs in its application registration: `http://localhost:8400/callback` locally, or the exact HTTPS URL in `CALLBACK_URL.txt` in Instruqt. It does not replace the upstream provider's redirect URL. See [Keycard providers](https://docs.keycard.ai/concepts/providers/) for identity and access federation.
 
 ## Policies decide access; Expense Desk decides expense actions
 
@@ -92,6 +92,6 @@ A workflow describes durable orchestration. Activities perform external work; wo
 
 On replay, Temporal uses recorded results to reconstruct workflow progress. In Exercise 04, wait until debit completion is recorded before stopping the worker. The next activity obtains a credential when it executes. An unrecorded activity can execute again, so Temporal alone does not make an external payment exactly once.
 
-Read the actual `SettlementWorkflow`, activities, and `KeycardInterceptor` wiring in `demo.py`. The supplied demo uses application credentials and simulates payment. Don't describe it as a live user-delegated settlement flow. As an advanced extension, the integration supports resolving a user identity reference inside an activity to obtain a current session token; that needs session lookup and appropriate worker registration. Don't persist the user's token as the workflow argument or present that extension as already configured.
+Read the actual workflow class, activities, and `KeycardInterceptor` wiring in `demo.py`. The supplied demo uses application credentials and simulates payment. Don't describe it as a live user-delegated payment flow. As an advanced extension, the integration supports resolving a user identity reference inside an activity to obtain a current session token; that needs session lookup and appropriate worker registration. Don't persist the user's token as the workflow argument or present that extension as already configured.
 
 Keycard Activity records credential events; Expense Desk records business actions; Temporal history records execution. These views answer different questions and their IDs are not interchangeable. For broader details, use [Temporal's Python guide](https://docs.temporal.io/develop/python) and the versions in the local lockfile.

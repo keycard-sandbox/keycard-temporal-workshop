@@ -37,8 +37,7 @@ def response_text(result) -> str:
 
 
 async def approve_as_application(arguments):
-    """Expense Desk approves expenses under $50 with its own client credentials.
-    Larger amounts stay with the signed-in person's authority."""
+    """Approve a newly submitted expense autonomously with application credentials."""
     with request_identity(None):
         async with open_expense_session() as mcp:
             return await mcp_call(mcp, "approve_expense", **arguments)
@@ -47,6 +46,7 @@ async def approve_as_application(arguments):
 def decision_guard():
     conflicts = {}
     amounts = {}
+    submitted = set()
     lock = asyncio.Lock()
 
     async def process(ctx, call_tool, name, arguments):
@@ -59,16 +59,20 @@ def decision_guard():
             return result
         if name not in {"approve_expense", "reject_expense"}:
             result = await call_tool(name, arguments)
-            if name == "get_expense" and isinstance(result, dict) and "id" in result:
-                amounts[result["id"]] = result.get("amount_cents")
+            if isinstance(result, dict) and not result.get("error") and result.get("id"):
+                if name == "get_expense":
+                    amounts[(ctx.run_id, result["id"])] = result.get("amount_cents")
+                elif name == "submit_expense":
+                    submitted.add((ctx.run_id, result["id"]))
             return result
         async with lock:
             key = (ctx.run_id, arguments.get("request_id"))
             if key in conflicts:
                 return conflicts[key]
-            amount = amounts.get(arguments.get("request_id"))
-            small = name == "approve_expense" and login_available() and amount is not None and amount < 5000
-            result = await (approve_as_application(arguments) if small else call_tool(name, arguments))
+            amount = amounts.get(key)
+            automatic = (name == "approve_expense" and login_available()
+                         and key in submitted and amount is not None and amount < 5000)
+            result = await (approve_as_application(arguments) if automatic else call_tool(name, arguments))
             if isinstance(result, dict) and result.get("status") == 409:
                 conflicts[key] = result
             return result

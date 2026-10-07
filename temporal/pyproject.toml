@@ -1,7 +1,7 @@
 [project]
 name = "keycardai-temporal-demo"
 version = "0.1.0"
-description = "Settlement demo for keycardai-temporal: per-call Keycard token minting in a Temporal worker"
+description = "Payment workflow demo for keycardai-temporal: per-call Keycard token minting in a Temporal worker"
 readme = "README.md"
 authors = [
     { name = "Kim Maida", email = "kim.maida@keycard.ai" }

@@ -7,7 +7,7 @@ A fresh environment starts empty. Everyone using the same Ledger API shares its 
 
 ## Submit an expense
 
-1. Open Expense Desk at http://localhost:8400 locally, or use your supplied preview URL.
+1. Open Expense Desk at http://localhost:8400 locally, or use the Expense Desk tab in Instruqt.
 2. Ask the Expense Desk agent to submit an expense. Choose your own amount and description, for example: "Submit a $75 expense for snacks for the workshop."
 3. If you haven’t supplied a name, answer the agent’s name question. An email address is optional; you can skip it. Neither value verifies your identity.
 4. After the agent confirms the submission, click the returned expense ID or its copy icon to copy it, then save it so you can find it later. IDs are copyable in chat, the expense list, and expense details.

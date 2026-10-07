@@ -35,7 +35,7 @@ Restart the affected process after changing `.env`; a running process still has 
 
 ## Browser sign-in errors
 
-For a redirect mismatch, compare your application's Redirect URI with `EXPENSE_DESK_ORIGIN` plus `/callback`. Use the exact HTTPS preview origin your instructor supplied. For local use, register `http://localhost:8400/callback`.
+For a redirect mismatch, compare your application's Redirect URI with `EXPENSE_DESK_ORIGIN` plus `/callback`. Locally, use `EXPENSE_DESK_ORIGIN=http://localhost:8400` and register `http://localhost:8400/callback`. In Instruqt, preserve the supplied HTTPS origin, register the exact URL in `CALLBACK_URL.txt`, and open Expense Desk in its own window for sign-in.
 
 
 If the callback reports a state mismatch, return to Expense Desk and start sign-in again. A stale callback tab or a process restart during sign-in can invalidate the original attempt.
@@ -44,7 +44,7 @@ Signing into the Keycard console with GitHub lets you configure your Expense Des
 
 ## Consent errors after sign-in
 
-1. Open your application and confirm **Implicit** consent and all four dependencies from [Exercise 02](02-application-identity.md#add-dependencies-before-signing-in-to-expense-desk).
+1. Open your application and confirm **Implicit** consent and all three dependencies from [Exercise 02](02-application-identity.md#add-dependencies-before-signing-in-to-expense-desk).
 2. Correct any differences, then return to Expense Desk and try **Refresh**.
 3. If an exchange still reports "User consent is required" or `insufficient_authorization`, ask an instructor to inspect the shared configuration. Bring the failing resource identifier and Keycard event ID.
 
@@ -62,10 +62,10 @@ Your own chat refreshes the view after each turn, including a failed response. C
 
 | Symptom | Next step |
 | --- | --- |
-| Connection refused or preview unavailable | Check the supplied MCP and browser processes. Ask an instructor about the preview or shared service. A connection error isn't evidence of an authorization refusal. |
+| Connection refused or Expense Desk unavailable | Check the supplied MCP and browser processes. Open `http://localhost:8400`; ask an instructor if the local processes or shared service remain unavailable. A connection error isn't evidence of an authorization refusal. |
 | Port already in use | Stop your previous copy of the process and restart the supplied command. Changing the MCP port also changes its registered audience. |
 | Workflow stays open after worker restart | Use the original namespace and queue. Start the worker, not a new workflow. |
-| You missed the settlement timer | Run a new workflow and wait for ActivityTaskCompleted and TimerStarted before stopping its worker. |
+| You missed the workflow timer | Run a new workflow and wait for ActivityTaskCompleted and TimerStarted before stopping its worker. |
 | Expected issuance doesn't appear in Activity | Check the worker application, time range, and zone Audit Log. Ask the instructor to correlate the run; the shared feed also contains other attendees' requests. |
 
 Replace `<package-path>` with your actual absolute extracted folder and `NN` with the stage number:
@@ -83,4 +83,4 @@ In this workshop, missing Activity access or application/resource creation contr
 
 ## Email cannot be resolved
 
-Expense Desk requires an email returned by Keycard OpenID Connect UserInfo for a signed-in person. A GitHub login or an email typed in chat is not a substitute. Ask the instructor to check that the zone identity provider supplies email, your application depends on OpenID Connect UserInfo, and the delegated Ledger API exchange allows `openid email`. Do not change your subject identifier or paste tokens into chat. Missing email must be repaired at the provider; sign-in never verifies earlier submissions.
+Expense Desk requires an email returned by Keycard OpenID Connect UserInfo for a signed-in person. A GitHub login or an email typed in chat is not a substitute. Ask the instructor to check that the zone identity provider supplies email, UserInfo requests succeed, and the delegated Ledger API exchange allows `openid email`. Do not change your subject identifier or paste tokens into chat. Missing email must be repaired at the provider; sign-in never verifies earlier submissions.

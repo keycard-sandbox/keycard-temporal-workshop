@@ -20,9 +20,9 @@ Find the workspace root containing `agent/` and `mcp-server/`. Don't assume the 
 | Temporal demo | `temporal/` | `temporal/` |
 | Checkpoint runner | Not available at source root | `checkpoints/restore.py` |
 
-In the source checkout, read `docs/run-from-source.md` for starter commands. Don't issue packaged checkpoint commands there. Packaging is optional for local demos; follow the user's intent before generating a package. The settlement demo is included in `temporal/`.
+In the source checkout, read `docs/run-from-source.md` for starter commands. Don't issue packaged checkpoint commands there. Packaging is optional for local demos; follow the user's intent before generating a package. The Temporal demo is included in `temporal/`.
 
-Inspect authentication wiring without importing it or starting services. File state can distinguish starter from secure code, but can't prove exercise completion, sign-in status, or which process is running. Ask only for missing context: current exercise, local/Instruqt environment, or supplied preview URL. Don't require setup checks to answer a conceptual question.
+Inspect authentication wiring without importing it or starting services. File state can distinguish starter from secure code, but can't prove exercise completion, sign-in status, or which process is running. Ask only for missing context: current exercise or local/Instruqt environment. Local use opens `http://localhost:8400`; Instruqt uses its Expense Desk tab and a supplied HTTPS origin. Preserve hosted `.env` settings and use `CALLBACK_URL.txt` for registration. Don't require setup checks to answer a conceptual question.
 
 ## Teach while guiding
 
@@ -40,7 +40,7 @@ Ask for the attendee's GitHub username before registration unless already suppli
 
 For every step, give a brief **why**, the action and where to perform it, and what to observe. Explain applications when creating the caller, resources and credential providers when choosing the token destination, Provided by Application when linking them, and Provides/Depends before adding dependencies. Read the concepts reference for the explanation, including Expense MCP Actor and Temporal Worker. Don't wait for attendees to ask what these terms mean.
 
-Keep guidance focused on the actions in the current exercise. Do not introduce background review workers or ask attendees or instructors to manage them. Use the current exercise guide for the identity and approval behavior to inspect. Use [the shared-key explanation](references/concepts.md#shared-access-does-not-identify-the-caller) for Exercise 01 identity questions. For self-approval, matching submitter and approver identities cause refusal; different identities still require the remaining business checks. Check that diagrams and summaries preserve these facts. Consult later sections only when needed for the question or when progression is explicitly requested.
+Keep guidance focused on the actions in the current exercise. Do not introduce background review workers or ask attendees or instructors to manage them. Use the current exercise guide for the identity and approval behavior to inspect. For the eligible $30 submission in Exercise 03, keep the person signed in and wait for the agent to approve autonomously in the same turn under its own application identity. Don't ask the person to click Approve, request approval, or switch to application-only browser access. If it stays pending, report the failure instead of presenting a requested approval as autonomous behavior. Use [the shared-key explanation](references/concepts.md#shared-access-does-not-identify-the-caller) for Exercise 01 identity questions. For self-approval, matching submitter and approver identities cause refusal; different identities still require the remaining business checks. Check that diagrams and summaries preserve these facts. Consult later sections only when needed for the question or when progression is explicitly requested.
 
 ## Choose the useful mode
 
@@ -55,7 +55,7 @@ Use the read-only helper for local configuration checks:
 uv run --locked --project <workshop-root>/agent python <skill-directory>/scripts/preflight.py --root <workshop-root> --stage 02
 ```
 
-Replace the bracketed paths with discovered paths. Use the preinstalled agent runtime, which includes python-dotenv; if it is missing, follow the workshop runtime setup first. Stages are `01`, `02`, `03`, and `04`; use `--starter` only for source-checkout Exercise 01. The helper prints statuses, never configuration values. It does not inspect live registrations, credentials' validity, running processes, or exported environment overrides. For Temporal, `runtime_default` means the setting is absent from the file; confirm the effective address, namespace, and queue against the instructor's values before running a worker.
+Replace the bracketed paths with discovered paths. Use the preinstalled agent runtime, which includes python-dotenv; if it is missing, follow the workshop runtime setup first. Stages are `01`, `02`, `03`, and `04`; use `--starter` only for source-checkout Exercise 01. The helper prints statuses, never configuration values. It does not inspect live registrations, credentials' validity, running processes, or exported environment overrides. For Temporal, `runtime_default` means the setting is absent from the file; the workshop defaults are `localhost:7233`, namespace `default`, and queue `keycard-temporal-demo`. Preserve existing configuration and use only one demo worker per queue; shared-service rehearsals need a unique queue.
 
 ## Preserve the exercise and attendee's scope
 

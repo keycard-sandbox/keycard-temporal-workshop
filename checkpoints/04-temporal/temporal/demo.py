@@ -1,4 +1,4 @@
-"""Simulated settlement: credentials stay inside activity execution."""
+"""Simulated payment: credentials stay inside activity execution."""
 
 from __future__ import annotations
 
@@ -97,7 +97,7 @@ async def main() -> None:
             workflows=[SettlementWorkflow],
             activities=[debit_ledger, mark_settled],
             interceptors=[
-                # Use the settlement identity explicitly, separate from agent credentials.
+                # Use the Temporal worker identity explicitly, separate from agent credentials.
                 KeycardInterceptor(
                     zone_url=os.environ["KEYCARD_ISSUER"],
                     credential=ClientSecret((client_id, client_secret)),
