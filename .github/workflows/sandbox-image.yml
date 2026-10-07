@@ -1,16 +1,14 @@
 # ABOUTME: Builds the Instruqt sandbox image and pushes it to GHCR.
-# main publishes :latest, which instruqt/config.yml pulls; other branches publish a branch tag.
+# main publishes :latest and SHA tags; Instruqt pins a tested SHA. Other branches publish a branch tag.
 name: Sandbox image
 
 on:
   push:
     paths-ignore:
       - "instruqt/**"
-      - "**.md"
   pull_request:
     paths-ignore:
       - "instruqt/**"
-      - "**.md"
   workflow_dispatch:
 
 jobs:

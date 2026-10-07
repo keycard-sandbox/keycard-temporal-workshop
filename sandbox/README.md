@@ -1,6 +1,6 @@
 # Instruqt sandbox and track
 
-This repository's root is the generated attendee package. It's mirrored from the internal workshop repository with `just sync-public`, so don't edit `agent/`, `mcp-server/`, `temporal/`, `checkpoints/`, `docs/` or `skills/` here. The Instruqt track (`instruqt/`), this sandbox image (`sandbox/`), the image build workflow (`.github/`) and the `justfile` are edited here directly.
+This repository's root is the generated attendee package. It's mirrored from the internal workshop repository with `just sync-public` from the private repository, so don't edit `agent/`, `mcp-server/`, `temporal/`, `checkpoints/`, `docs/` or `skills/` here. The Instruqt track (`instruqt/`), this sandbox image (`sandbox/`), the image build workflow (`.github/`) and the `justfile` are edited here directly.
 
 ## What the sandbox runs
 

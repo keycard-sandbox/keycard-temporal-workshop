@@ -203,13 +203,12 @@ Now that your application provides a resource, you'll tell Keycard which resourc
 They point in opposite directions.
 Receiving a token doesn't, by itself, allow every call that comes after it.
 
-On your application, open **Dependencies**, click on **Add dependency**, and connect all four of these resources:
+On your application, open **Dependencies**, click on **Add dependency**, and connect all three of these resources:
 
 | Resource | Identifier | Why your agent needs it |
 | --- | --- | --- |
 | Your agent resource | `urn:agent:resource:YOUR-GITHUB-HANDLE` | Sign-in requests a subject token for this audience. |
 | Expense MCP Resource | `http://localhost:8100/mcp` | Your agent calls the expense tools. |
-| OpenID Connect UserInfo | The zone's built-in resource | Looks up the signed-in person's email. |
 | LLM API | `https://api.openai.com` | Your agent gets the model credential from Keycard's vault. |
 
 Your agent now connects to its own resource twice.
@@ -255,7 +254,7 @@ Before you continue, check your registration against this list:
 
 - Your application identifier starts with `urn:agent:app:` and uses your GitHub handle.
 - Your resource uses Zone Provider, has no scopes, and your application provides it.
-- Your application depends on your resource, Expense MCP, OpenID Connect UserInfo, and the LLM API resource.
+- Your application depends on your resource, Expense MCP, and the LLM API resource.
 - Your application has Implicit consent and the exact callback URL from Step 3.
 - `agent/.env` holds your own credential and resource identifier.
 
