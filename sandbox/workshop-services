@@ -9,6 +9,10 @@
 # Desk's TrustedHostMiddleware accepts only the EXPENSE_DESK_ORIGIN host.
 # Caddy also narrows the app's frame-ancestors from 'none' to Instruqt pages,
 # so the Expense Desk tab can render embedded in the lab.
+#
+# Processes are matched by command line, never by name. Instruqt's PID 1
+# doesn't reap background children, so a stopped process can linger as a
+# zombie that keeps its name but loses its command line.
 set -uo pipefail
 
 WORKSHOP=/root/workshop
@@ -45,7 +49,7 @@ start() {
             > "$LOGS/web.log" 2>&1 &
     fi
     wait_for http://127.0.0.1:8400/ web "agent/web.py" || return 1
-    if ! pgrep -x caddy >/dev/null; then
+    if ! pgrep -f "caddy run" >/dev/null; then
         local bind host
         bind=$(hostname -I | awk '{print $1}')
         host=$(origin_host)
@@ -72,9 +76,9 @@ EOF
 stop() {
     pkill -f "agent/web.py" || true
     pkill -f "mcp-server/server.py" || true
-    pkill -x caddy || true
+    pkill -f "caddy run" || true
     for _ in $(seq 1 10); do
-        pgrep -f "agent/web.py|mcp-server/server.py" >/dev/null || break
+        pgrep -f "agent/web.py|mcp-server/server.py|caddy run" >/dev/null || break
         sleep 1
     done
     echo "==> Expense Desk stopped."
@@ -84,7 +88,7 @@ status() {
     for name in "mcp-server/server.py" "agent/web.py"; do
         if pgrep -f "$name" >/dev/null; then echo "running  $name"; else echo "stopped  $name"; fi
     done
-    if pgrep -x caddy >/dev/null; then echo "running  preview forwarder"; else echo "stopped  preview forwarder"; fi
+    if pgrep -f "caddy run" >/dev/null; then echo "running  preview forwarder"; else echo "stopped  preview forwarder"; fi
 }
 
 case "${1:-}" in
