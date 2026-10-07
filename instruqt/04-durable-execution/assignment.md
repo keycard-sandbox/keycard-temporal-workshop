@@ -306,12 +306,13 @@ They run for minutes or days, wait for people to approve things, and call tools 
 Every one of those steps is a chance for a deploy, a crash, or a timeout to stop the agent partway through.
 Without durability, the agent either starts over, spending tokens to repeat work it already did, or repeats an action like a payment that already happened.
 
-That's why Temporal calls itself the *outer harness* for agents.
-Agent software development kits (SDKs) and frameworks, like the Pydantic AI agent inside Expense Desk's reviewer, are the inner harness: they decide how your agent plans and which tools it calls.
-Temporal wraps around them and handles how the agent runs.
-Your agent loop lives in a Workflow, the durable spine that survives crashes because Temporal can replay its history.
-Your model calls and tool calls live in Activities, which Temporal retries with timeouts and backoff when they fail.
-You saw both halves in this exercise: the Worker went away, and the Workflow never lost its place.
+Expense Desk shows one way Temporal fits in: as the *outer harness* around an agent.
+The reviewer uses a Pydantic AI agent to decide what to do and which tools to call, and Temporal wraps around it and handles how it runs.
+The agent loop lives in a Workflow, the durable spine that survives crashes because Temporal can replay its history.
+The model calls and tool calls live in Activities, which Temporal retries with timeouts and backoff when they fail.
+Temporal can also be the inner harness, the agent loop itself.
+Its primitives cover the parts of an agent that frameworks often leave to you, like human approvals, guardrails, and cost controls.
+Either way, you saw the result in this exercise: the Worker went away, and the Workflow never lost its place.
 
 Now that you know why durability matters, you'll check where the credentials ended up.
 
