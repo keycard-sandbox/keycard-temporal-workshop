@@ -51,15 +51,16 @@ enhanced_loading: null
 You now know who your agent is and who it acts for.
 There's one more thing it needs: it has to survive failure.
 
-An agent is a loop.
+Your agent is a loop.
 It reads some data, calls a model, calls a tool, waits, and does it again.
 Any step can fail partway through: a deploy, a crash, a dropped connection.
 A plain loop loses its place when its process dies, and when it starts again it can repeat work it already finished.
 If that work was a payment, someone gets paid twice.
+If it was a model call, you pay for the same tokens again.
 
 Temporal makes your agent durable.
 Temporal records each step's result in a Workflow's *Event History*.
-When a process restarts, it replays that history, reuses the results it already has, and continues from the step that hadn't finished.
+When a Worker restarts, it replays that history to rebuild the Workflow's state, reuses the results it already has, and continues from the first step that hadn't finished.
 
 In this exercise, you'll see that the Expense Desk agent already runs this way.
 Then you'll run a smaller Workflow with the same shape, stop its Worker partway through, and watch it finish without repeating a step.
@@ -89,7 +90,7 @@ class ExpenseReview:
 This is the agent loop.
 Each pass runs the `review_expense` *Activity*, a step that does real work and that Temporal can retry if it fails.
 Then the Workflow sleeps for 60 seconds and checks again.
-After 100 passes, `continue_as_new` starts a fresh run for the same expense, so the history never grows without limit.
+After 100 passes, `continue_as_new` starts a fresh run for the same expense, so each run's Event History stays small.
 
 Now open `agent/review.py` to see the model call inside that Activity:
 
@@ -112,11 +113,10 @@ async def assess(row: dict) -> Assessment:
 The Activity reads the expense through the MCP server.
 Then a Pydantic AI agent asks the model whether the expense meets the policy.
 Finally, the Activity records the decision through the MCP tools.
-Every model call and tool call happens inside an Activity, so Temporal records each result.
-If the process running the agent dies, another one picks up the same review where it stopped.
+Each pass of the review runs as one Activity, so Temporal records each pass's result.
+If the process dies mid-pass, Temporal retries that pass, and the passes that already finished don't run again.
 
-The instructors keep this reviewer turned off during the workshop.
-It reviews every new expense in the shared Ledger API, including yours.
+The instructors keep this reviewer turned off during the workshop, because it would review every new expense in the shared Ledger API, including yours.
 
 Now that you've seen the agent's shape, you'll run a smaller Workflow with the same shape, one you can interrupt on purpose.
 
@@ -183,7 +183,7 @@ interceptors=[
 A *Worker* is the process that runs your Workflow and Activity code.
 *Interceptors* are Temporal's way to run your own code around every Workflow and Activity call.
 The `KeycardInterceptor` runs before each Activity and gets a fresh token for every Activity that has a `@grant`.
-The token never goes into the Activity's input or result, so it never reaches the Event History.
+The token never goes into the Activity's input, result, or headers, so it never reaches the Event History.
 
 Now that you've seen the code, you'll give the Worker its credentials.
 
@@ -201,11 +201,6 @@ WORKER_KEYCARD_CLIENT_SECRET=WORKER-CLIENT-SECRET
 
 Leave the other lines alone; your sandbox already filled them in.
 Save the file.
-
-Notice what just happened.
-Everyone in the room now holds the same Worker secret, which is the shared-key problem from Exercise 01 all over again.
-We did it here to keep setup fast.
-In production, each deployment gets its own workload identity through Workload Identity Federation (WIF for short), and Keycard issues credentials to that identity, so there's no secret to pass around.
 
 Now that the Worker has credentials, you'll start it.
 
@@ -259,7 +254,8 @@ Now that the debit has run, it's time to interrupt the Workflow.
 ## Step 6: Stopping the Worker mid-settlement
 
 Click on the [button label="Temporal UI" background="#444CE7"](tab-0) tab and open your Workflow.
-In its Event History, find **ActivityTaskCompleted** for the debit, followed by **TimerStarted**.
+Open the **All** view of its Event History, which lists every event by name.
+Find **ActivityTaskCompleted** for the debit, followed by **TimerStarted**.
 The debit is done, and Temporal has recorded its result.
 
 Now click on the [button label="Worker" background="#444CE7"](tab-1) tab and press `CTRL+C` to stop the Worker.
@@ -309,7 +305,7 @@ Without durability, the agent either starts over, spending tokens to repeat work
 Expense Desk shows one way Temporal fits in: as the *outer harness* around an agent.
 The reviewer uses a Pydantic AI agent to decide what to do and which tools to call, and Temporal wraps around it and handles how it runs.
 The agent loop lives in a Workflow, the durable spine that survives crashes because Temporal can replay its history.
-The model calls and tool calls live in Activities, which Temporal retries with timeouts and backoff when they fail.
+The model calls and tool calls run inside an Activity, which Temporal retries with timeouts and backoff when it fails.
 Temporal can also be the inner harness, the agent loop itself.
 Its primitives cover the parts of an agent that frameworks often leave to you, like human approvals, guardrails, and cost controls.
 Either way, you saw the result in this exercise: the Worker went away, and the Workflow never lost its place.
@@ -318,7 +314,7 @@ Now that you know why durability matters, you'll check where the credentials end
 
 ## Step 8: Keeping secrets out of history
 
-Temporal keeps a Workflow's Event History for the namespace's retention period, and anyone who can read the Workflow can see what's in it.
+Temporal keeps a Workflow's Event History while it runs and for the namespace's retention period after it closes, and anyone who can read the Workflow can see what's in it.
 So anything sensitive should stay out of it.
 
 The Client tab printed a command to check your Workflow's history.
@@ -343,7 +339,7 @@ You'll see amounts and results, but never a token.
 Temporal gives you two ways to keep sensitive data out of Event History:
 
 - **Interceptors**, like the `KeycardInterceptor` you saw, keep data like credentials out of history entirely by fetching them inside each Activity.
-- A **Payload Codec** encrypts the data that does go into history. Your Workers encrypt each input and result before it leaves the process, so the Temporal Service only stores ciphertext. A *Codec Server* that you run decrypts the data for the Temporal UI and CLI, and Temporal never holds your keys.
+- A **Payload Codec** encrypts the data that does go into history. Your Clients and Workers encrypt each input and result before it leaves the process, so the Temporal Service stores those as ciphertext. Failure messages need the Failure Converter's encoding option too. A *Codec Server* that you run decrypts the data for the Temporal UI and CLI, and Temporal never holds your keys.
 
 Finally, look at the same run from Keycard's side.
 In the [button label="Keycard" background="#444CE7"](tab-4) tab, open **Applications > Temporal Worker > Activity**.
