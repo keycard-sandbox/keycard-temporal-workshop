@@ -295,7 +295,25 @@ In the Event History, you'll find one `debit_ledger` and one `mark_settled` Acti
 This is what makes your agent durable.
 If the process running your agent dies, a new one replays the history and continues, instead of starting over or paying twice.
 
-Now that the settlement has finished, you'll check where the credentials ended up.
+Now that you've watched a Workflow survive a crash, it's worth stepping back to see why this matters for agents.
+
+## Why durability matters for agents
+
+An agent is a loop.
+It asks a model what to do next, calls a tool, looks at the result, and goes around again until it finishes the job.
+Agents in production don't finish in seconds.
+They run for minutes or days, wait for people to approve things, and call tools that are slow, unreliable, or expensive.
+Every one of those steps is a chance for a deploy, a crash, or a timeout to stop the agent partway through.
+Without durability, the agent either starts over, spending tokens to repeat work it already did, or repeats an action like a payment that already happened.
+
+That's why Temporal calls itself the *outer harness* for agents.
+Agent software development kits (SDKs) and frameworks, like the Pydantic AI agent inside Expense Desk's reviewer, are the inner harness: they decide how your agent plans and which tools it calls.
+Temporal wraps around them and handles how the agent runs.
+Your agent loop lives in a Workflow, the durable spine that survives crashes because Temporal can replay its history.
+Your model calls and tool calls live in Activities, which Temporal retries with timeouts and backoff when they fail.
+You saw both halves in this exercise: the Worker went away, and the Workflow never lost its place.
+
+Now that you know why durability matters, you'll check where the credentials ended up.
 
 ## Step 8: Keeping secrets out of history
 
