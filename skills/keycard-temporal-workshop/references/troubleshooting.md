@@ -6,6 +6,10 @@ Run preflight for local configuration, then inspect the relevant evidence: Keyca
 
 Apply the smallest repair supported by the evidence. Restart the affected process after `.env` edits and retry the original operation once. If it still fails, investigate the new evidence rather than repeating the same fix. Keep expected exercise refusals intact and route shared-service changes to the instructor.
 
+## UserInfo access denied
+
+A denial naming an attendee application on OpenID Connect UserInfo requires instructor inspection of shared policy. Keep the three documented dependencies; UserInfo may be visible in Resources but unavailable in the dependency picker. Do not ask attendees to add it, create a replacement, remove `openid email`, or reset a checkpoint. Capture the event ID and timestamp; retry the original call after the instructor repairs access. Adding access only for Expense MCP Actor does not repair the named application subject's denial.
+
 ## Instructor handoff
 
 Prepare a redacted summary of the exercise, operation, environment, timestamp, error, failing resource, relevant event or workflow ID, and checks performed. Identify the shared setting that needs inspection and distinguish hypotheses from confirmed causes. Let the attendee share the summary unless they authorize you to send it.

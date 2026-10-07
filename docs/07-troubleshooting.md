@@ -48,6 +48,12 @@ Signing into the Keycard console with GitHub lets you configure your Expense Des
 2. Correct any differences, then return to Expense Desk and try **Refresh**.
 3. If an exchange still reports "User consent is required" or `insufficient_authorization`, ask an instructor to inspect the shared configuration. Bring the failing resource identifier and Keycard event ID.
 
+## Application is not allowed to access OpenID Connect UserInfo
+
+OpenID Connect UserInfo can appear in Resources without being selectable as an application dependency. Keep the three dependencies above. The instructor must configure shared UserInfo access before Exercise 02: the MCP requests `openid email` on every onward Ledger API exchange, including application-only calls. If Activity says your application is not allowed to access OpenID Connect UserInfo, give the instructor the event ID and timestamp. Do not create a replacement resource or reset your checkpoint.
+
+After the instructor repairs shared access, retry the original tool call or click **Refresh**. A dependency added only to Expense MCP Actor does not address missing access for the attendee application named in the denial. Keep `openid email` in the onward exchange; signed-in Ledger API calls need verified email.
+
 ## Policy denials and expense refusals
 
 For `access_denied`, inspect the Keycard event's reason. Correct your own registration if it names a mismatch; ask an instructor about shared policies. Re-authenticating doesn't change a policy decision.

@@ -4,7 +4,7 @@ Read Exercise 02 (`02-application-identity.md` in a package, `ex02.md` in source
 
 Workshop console access uses only the SSO link provided in Exercise 02, both for first-time joining and for signing back in after logout. Direct sign-in at `console.keycard.ai` does not work for workshop accounts. Keep Expense Desk’s own Sign in flow separate from workshop console access.
 
-The attendee dependency list contains their own agent resource, Expense MCP, and the LLM API resource. Do not ask them to find or add OpenID Connect UserInfo in the dependency picker. If sign-in or email resolution fails, follow the troubleshooting guide and route shared UserInfo access checks to the instructor.
+The attendee dependency list contains their own agent resource, Expense MCP, and the LLM API resource. Guide attendees through those three dependencies. Shared UserInfo policy is instructor preparation, not an attendee setup step; discuss it only when diagnosing a matching error using the troubleshooting guide.
 
 Have the attendee enter credentials directly into `agent/.env`. Update known non-secret values while preserving supplied settings and unrelated edits. If the file is absent, start with `.env.example` and obtain missing private shared-service credentials from the instructor; never replace an existing file with the example.
 
