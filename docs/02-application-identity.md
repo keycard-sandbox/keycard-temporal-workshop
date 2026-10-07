@@ -5,14 +5,14 @@ In Exercise 01, anyone could supply a name when submitting an expense. Now you'l
 
 Stop the browser and starter MCP processes.
 
-## Join Keycard
+## Join or sign back into Keycard
 
-1. Visit [the workshop join link](https://id.keycard.ai/openid/connect/login?tenant=v6f1suvmlhp7k4a21bzyqp80w3&iss=https%3A%2F%2Fkeycard-temporal-workshop.us.auth0.com%2F&target_link_uri=https%3A%2F%2Fconsole.keycard.ai).
+1. Visit [the workshop SSO link](https://id.keycard.ai/openid/connect/login?tenant=v6f1suvmlhp7k4a21bzyqp80w3&iss=https%3A%2F%2Fkeycard-temporal-workshop.us.auth0.com%2F&target_link_uri=https%3A%2F%2Fconsole.keycard.ai).
 2. Sign in with your GitHub account. On your first join, complete both consent prompts: authorize access through GitHub, then authorize Keycard. New workshop members start with Viewer access.
 3. You should see "Workshop AIE NYC" in the upper left corner after signing in.
 4. Tell Kim when you've joined. Kim will grant Admin access to create your agent registration and inspect Activity. After Kim confirms, refresh Keycard and check that you can see buttons to create applications and resources. Contact Kim if the controls are missing.
 
-If you have trouble accessing Keycard, ask an instructor.
+Use this same workshop SSO link to join for the first time and to sign back in whenever you are logged out. Bookmark it. Workshop accounts cannot sign in through `console.keycard.ai` directly; the SSO link takes you to the console after authentication. If you have trouble accessing Keycard, ask an instructor.
 
 You can see other attendees' registrations because everyone uses the same Keycard organization and shared services.
 

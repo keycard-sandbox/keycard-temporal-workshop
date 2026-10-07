@@ -23,7 +23,7 @@ A Keycard credential doesn't guarantee that Expense Desk will approve an expense
 
 | Symptom | What to check | Who fixes it |
 | --- | --- | --- |
-| GitHub sign-in doesn't open the workshop zone | Use the instructor's workshop link and your intended GitHub account. Don't create another zone. | Instructor checks zone access and registration permissions. |
+| GitHub sign-in doesn't open the workshop zone | Use [Exercise 02’s workshop SSO link](02-application-identity.md#join-or-sign-back-into-keycard) and your intended GitHub account for both joining and signing back in after logout. Direct sign-in at `console.keycard.ai` does not work for workshop accounts. Don't create another zone. | Instructor checks zone access and registration permissions. |
 | `invalid_target` | Compare `AGENT_RESOURCE`, `MCP_URL`, or `LLM_RESOURCE` with the named resource's identifier, including port and path. | You fix your values; the instructor fixes shared resources. |
 | `invalid_client` | Use the client ID and secret from the same credential on your own application. | You update `agent/.env` and restart the Expense Desk agent. |
 | Lost client secret | Replace the credential under Application Credentials and copy both new values. | You update your file; don't replace another app's credentials. |

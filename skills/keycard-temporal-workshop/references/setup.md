@@ -2,6 +2,8 @@
 
 Read Exercise 02 (`02-application-identity.md` in a package, `ex02.md` in source) in the documentation directory identified by `SKILL.md`. Follow its registration steps for console fields, dependencies, callbacks, and the current consent setting. Ask for the GitHub username before registration and reuse it in every applicable name and identifier. Reuse it if already given. Locally, use `EXPENSE_DESK_ORIGIN=http://localhost:8400` and redirect URI `http://localhost:8400/callback`. In Instruqt, keep the supplied HTTPS origin and register the exact URL in `CALLBACK_URL.txt`; sign in with Expense Desk in its own window. Preserve the hosted Temporal namespace `default` and queue `keycard-temporal-demo`. Use the fixed settings in Setup; do not ask attendees to obtain these values from an instructor.
 
+Workshop console access uses only the SSO link provided in Exercise 02, both for first-time joining and for signing back in after logout. Direct sign-in at `console.keycard.ai` does not work for workshop accounts. Keep Expense Desk’s own Sign in flow separate from workshop console access.
+
 The attendee dependency list contains their own agent resource, Expense MCP, and the LLM API resource. Do not ask them to find or add OpenID Connect UserInfo in the dependency picker. If sign-in or email resolution fails, follow the troubleshooting guide and route shared UserInfo access checks to the instructor.
 
 Have the attendee enter credentials directly into `agent/.env`. Update known non-secret values while preserving supplied settings and unrelated edits. If the file is absent, start with `.env.example` and obtain missing private shared-service credentials from the instructor; never replace an existing file with the example.
