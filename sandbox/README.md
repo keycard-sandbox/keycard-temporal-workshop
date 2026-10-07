@@ -36,9 +36,9 @@ Blank secrets don't stop the sandbox. Setup writes empty values, warns that Expe
 
 ## Build and publish
 
-Pushes to `main` build `ghcr.io/keycardai/keycard-temporal-workshop-sandbox:latest`, which `instruqt/config.yml` pulls. Other branches publish a branch-named tag. Pull requests and Dependabot pushes build without publishing. The workflow uses this repository’s `GITHUB_TOKEN` with `packages: write` to publish within the `keycardai` organization.
+Pushes to `main` build `ghcr.io/keycardai/keycard-temporal-workshop-sandbox:latest`, and every build is also tagged with its commit SHA. `instruqt/config.yml` pins the track to one of those commit-SHA tags, a build that has been tested on a lab, so a new push to `main` never changes the live track by itself. Other branches publish a branch-named tag. Pull requests and Dependabot pushes build without publishing. The workflow uses this repository’s `GITHUB_TOKEN` with `packages: write` to publish within the `keycardai` organization.
 
-Before deploying the track, merge the publishing fix to `main`, wait for the Sandbox image workflow to publish `:latest`, and make the GHCR package public. Verify an anonymous pull of `ghcr.io/keycardai/keycard-temporal-workshop-sandbox:latest` before running `just push`; Instruqt needs public access to pull it.
+To ship a new image: wait for the Sandbox image workflow on `main`, test that build on a lab, set the `image:` tag in `instruqt/config.yml` to its commit SHA, and verify an anonymous pull of that tag before running `just push`. Instruqt needs public access to pull it.
 
 ```sh
 just sandbox-build dev   # local linux/amd64 build from this checkout
