@@ -21,7 +21,7 @@ tabs:
 - id: fbw0yniaimnv
   title: Keycard
   type: website
-  url: https://console.keycard.ai
+  url: https://id.keycard.ai/openid/connect/login?tenant=v6f1suvmlhp7k4a21bzyqp80w3&iss=https%3A%2F%2Fkeycard-temporal-workshop.us.auth0.com%2F&target_link_uri=https%3A%2F%2Fconsole.keycard.ai
   new_window: true
 - id: tsnylbthituq
   title: Editor

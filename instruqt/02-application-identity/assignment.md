@@ -25,7 +25,7 @@ tabs:
 - id: fnpf0bzyz9yg
   title: Keycard
   type: website
-  url: https://console.keycard.ai
+  url: https://id.keycard.ai/openid/connect/login?tenant=v6f1suvmlhp7k4a21bzyqp80w3&iss=https%3A%2F%2Fkeycard-temporal-workshop.us.auth0.com%2F&target_link_uri=https%3A%2F%2Fconsole.keycard.ai
   new_window: true
 - id: nn2xtezak31z
   title: Editor
@@ -61,7 +61,7 @@ Everyone in the room shares one Keycard organization, so each identifier has to 
 Everyone in the workshop joins the same Keycard organization.
 You'll sign in with GitHub, so there's no new account to create.
 
-Open the [workshop join link](https://id.keycard.ai/openid/connect/login?tenant=v6f1suvmlhp7k4a21bzyqp80w3&iss=https%3A%2F%2Fkeycard-temporal-workshop.us.auth0.com%2F&target_link_uri=https%3A%2F%2Fconsole.keycard.ai) and sign in with your GitHub account.
+Open the [workshop SSO link](https://id.keycard.ai/openid/connect/login?tenant=v6f1suvmlhp7k4a21bzyqp80w3&iss=https%3A%2F%2Fkeycard-temporal-workshop.us.auth0.com%2F&target_link_uri=https%3A%2F%2Fconsole.keycard.ai) and sign in with your GitHub account.
 The first time you join, you'll see two consent prompts.
 Approve both: the first authorizes access through GitHub, and the second authorizes Keycard.
 
@@ -71,7 +71,7 @@ New members start with Viewer access, which can look but can't create anything.
 Tell an instructor that you've joined, and they'll grant you Admin access.
 After they confirm, refresh the page and check that you can see the buttons to create applications and resources.
 
-You can reach the console again later from the [button label="Keycard" background="#444CE7"](tab-1) tab.
+Use the same workshop SSO link to join for the first time and to sign back in whenever you are logged out. Bookmark it. Workshop accounts cannot sign in through `console.keycard.ai` directly. The [button label="Keycard" background="#444CE7"](tab-1) tab opens the workshop SSO link too.
 
 Now that you're in the workshop organization, take a quick tour before you build anything.
 
