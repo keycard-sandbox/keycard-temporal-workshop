@@ -28,12 +28,12 @@ The configuration supplies model access and the shared Ledger API service. If `K
 
 ## Fixed workshop configuration
 
-The templates below are for local follow-along. In Instruqt, keep the supplied `.env` files: Expense Desk uses your sandbox’s HTTPS origin, and `CALLBACK_URL.txt` contains its matching redirect URI. Use the track’s Temporal UI tab, namespace `default`, and queue `keycard-temporal-demo`; do not replace them with local settings.
+The templates below are for local follow-along. In Instruqt, keep the supplied `.env` files: Expense Desk uses your sandbox’s HTTPS origin, and `CALLBACK_URL.txt` contains its matching redirect URL. Use the track’s Temporal UI tab, namespace `default`, and queue `keycard-temporal-demo`; do not replace them with local settings.
 
 | Setting | Value |
 | --- | --- |
 | Expense Desk / `EXPENSE_DESK_ORIGIN` | `http://localhost:8400` |
-| Application Redirect URI | `http://localhost:8400/callback` |
+| Application Redirect URL | `http://localhost:8400/callback` |
 | `MCP_URL` | `http://localhost:8100/mcp` |
 | `KEYCARD_ISSUER` | `https://ho0llbxj2o7enn7l48tuzic25t.keycard.cloud` |
 | `LLM_PROVIDER` / `LLM_MODEL` | `openai` / `gpt-5.4-mini` |

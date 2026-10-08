@@ -16,7 +16,7 @@ MCP also has both registrations because it receives agent requests and calls Led
 
 | Component | Application role | Resource role | Who configures it |
 | --- | --- | --- | --- |
-| Expense agent | Requests MCP and model credentials | `urn:agent:resource:<githubhandle>` receives the sign-in audience | Attendee |
+| Expense agent | Requests MCP and model credentials | `urn:agent:resource:<your-github-handle>` receives the sign-in audience | Attendee |
 | Expense MCP | Exchanges the incoming token for Ledger API access | `http://localhost:8100/mcp` receives agent calls | Instructor |
 | Ledger API | No onward exchange is required in this workshop | `urn:ledger:api` identifies the final API | Instructor |
 | Model API | The agent requests its credential | Supplied `LLM_RESOURCE` identifies a vault-backed credential target | Instructor |
@@ -84,7 +84,7 @@ Expense Desk then checks the business action: ownership, approval limits, and th
 
 For a self-approval refusal, compare the expense submitter with the current verified identity and read the refusal. A refused write does not establish a successful Decided by actor or a new decision in Activity. Inspect the current status instead of inventing a decision record. Different identities still require the amount, state, and other business checks to pass.
 
-Trace an allowed partner approval: credential requests succeed, Expense Desk sees the verified user, and its expense checks allow the pending partner expense. Trace a self-approval refusal: credentials can succeed while Expense Desk refuses the business action. For `access_denied` during minting, inspect Keycard Activity before blaming Expense Desk. Re-authentication can't change a policy decision.
+Trace an allowed approval or rejection of another attendee's expense: credential requests succeed, Expense Desk sees the verified user, and its expense checks allow the selected pending expense. Trace a self-approval refusal: credentials can succeed while Expense Desk refuses the business action. For `access_denied` during minting, inspect Keycard Activity before blaming Expense Desk. Re-authentication can't change a policy decision.
 
 ## Temporal records progress; activities acquire credentials
 

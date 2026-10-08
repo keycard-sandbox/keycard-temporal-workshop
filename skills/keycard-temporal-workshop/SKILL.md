@@ -59,7 +59,7 @@ Replace the bracketed paths with discovered paths. Use the preinstalled agent ru
 
 ## Preserve the exercise and attendee's scope
 
-Explain before acting when the attendee asks to learn; carry out requested local configuration and troubleshooting work within their authorization. A general request for help does not authorize submitting or approving expenses. Use only their own or explicitly exchanged partner expense IDs for requested exercise actions.
+Explain before acting when the attendee asks to learn; carry out requested local configuration and troubleshooting work within their authorization. A general request for help does not authorize submitting or approving expenses. Use only their own expense IDs or the exact expense ID they selected and explicitly authorized you to act on for requested exercise actions.
 
 Attendees own their application, resource, and local agent configuration. Instructors own shared providers, policies, MCP and Ledger API services, vault credentials, and worker setup. Don't create another zone, copy Example credentials, relax authorization, or change shared infrastructure to clear an error. Explain a shared setting freely; route shared changes to the instructor.
 

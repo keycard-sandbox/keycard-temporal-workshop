@@ -8,7 +8,7 @@ Apply the smallest repair supported by the evidence. Restart the affected proces
 
 ## UserInfo access denied
 
-For a denial naming an attendee application on OpenID Connect UserInfo, check that application's dependencies. If UserInfo is missing, guide the attendee to **Dependencies → Add dependency** and select the UserInfo resource. Retry the original operation. If access still fails, capture the event ID and timestamp for the instructor. Follow the attendee troubleshooting guide.
+For a denial naming an attendee application on OpenID Connect UserInfo, open that application's dependencies in the Keycard console. If UserInfo is missing, guide the attendee to **Dependencies → Add dependency** and select the UserInfo resource. Return to Expense Desk and retry the original operation. If access still fails, capture the event ID and timestamp for the instructor. Follow the attendee troubleshooting guide.
 
 ## Instructor handoff
 
@@ -18,4 +18,4 @@ For checkpoint recovery, follow the exercise guide and preserve local edits befo
 
 ## Activity or creation controls unavailable
 
-In this workshop, missing Activity access or application/resource creation controls can mean you still have the Viewer role. Ask the instructor to grant Admin access, then refresh the console. Don't modify another attendee's registration to work around missing permissions.
+In this workshop, missing Activity access or application/resource creation controls can mean you still have the Viewer role. Ask the instructor to grant Admin access, then refresh the Keycard console. Don't modify another attendee's registration to work around missing permissions.
