@@ -44,9 +44,13 @@ Signing into the Keycard console with GitHub lets you configure your Expense Des
 
 ## Consent errors after sign-in
 
-1. Open your application and confirm **Implicit** consent and all three dependencies from [Exercise 02](02-application-identity.md#add-dependencies-before-signing-in-to-expense-desk).
+1. Open your application and confirm **Implicit** consent and the four dependencies from [Exercise 02](02-application-identity.md#add-dependencies-before-signing-in-to-expense-desk).
 2. Correct any differences, then return to Expense Desk and try **Refresh**.
 3. If an exchange still reports "User consent is required" or `insufficient_authorization`, ask an instructor to inspect the shared configuration. Bring the failing resource identifier and Keycard event ID.
+
+## Application is not allowed to access OpenID Connect UserInfo
+
+If Activity says your application is not allowed to access OpenID Connect UserInfo, open **Applications → Agent App - <githubhandle> → Dependencies → Add dependency**. Select the UserInfo resource. Retry the original tool call or click **Refresh**. If access still fails, give the instructor the event ID and timestamp.
 
 ## Policy denials and expense refusals
 

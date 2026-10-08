@@ -27,7 +27,7 @@ Partner approval should succeed, while self-approval should fail with a reason. 
 
 ## Follow the credential requests
 
-1. In the **Keycard console**, open **Applications → Expense Desk Agent - <your GitHub username> → Activity**. Open **Filters → Clear** to remove earlier filters. Choose a time range containing your run.
+1. In the **Keycard console**, open **Applications → Agent App - <your GitHub username> → Activity**. Open **Filters → Clear** to remove earlier filters. Choose a time range containing your run.
 2. Open **Filters → Actor**, search for your signed-in GitHub email, and select the matching person. Actor includes applications acting on that person's behalf.
 3. Set **Filters → Resource → Expense MCP Resource**. Open a **Credential Issued** entry labeled `urn:ietf:params:oauth:grant-type:token-exchange`. Check **Delegation Chain** for your agent application **on behalf of your email**, and **Resource** for **Expense MCP Resource**. Use the time of your action as a secondary check.
 4. In that event's **Overview**, copy **Session**. Close the detail panel, then open **Filters → Session**, paste that ID under **Or enter an ID**, and click **Apply**. This narrows your authenticated run; a session can contain several tool calls.
