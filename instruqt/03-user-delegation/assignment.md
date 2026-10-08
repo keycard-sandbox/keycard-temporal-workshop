@@ -3,13 +3,13 @@ slug: user-delegation
 id: 9vxqvyeiktom
 type: challenge
 title: 'Exercise 03: User delegation'
-teaser: Sign in, approve a partner's expense, and watch Expense Desk refuse your own.
+teaser: Sign in, approve or reject someone else's expense, and watch Expense Desk refuse your own.
 notes:
 - type: text
   contents: |-
     # Can the agent act for you without acting as you?
 
-    Application identity says which software made the call. It doesn't say which person asked. Sign in and your agent carries your identity through two token exchanges to the ledger.
+    Application identity says which software made the call. It doesn't say which *user* requested that call. Sign in and your agent carries your identity through two token exchanges to the ledger.
 tabs:
 - id: zusp4am3j8rt
   title: Expense Desk
@@ -42,20 +42,21 @@ In Exercise 02, your agent got its own identity.
 The Ledger API now knows which application made each request, but it still doesn't know which person asked for it.
 
 In this exercise, you'll sign in to Expense Desk so your agent can act on your behalf.
-You'll approve a partner's expense and watch Expense Desk refuse to let you approve your own.
+You'll approve or reject someone else's expense and watch Expense Desk refuse to let you approve your own.
 Then you'll follow your identity through each credential request in Keycard.
 
 Keep the MCP server and Expense Desk running from Exercise 02.
 Your sandbox kept your `agent/.env` and the authenticated code, so there's nothing to restart.
 
-## Step 1: Signing in
+## Step 1: Sign in
 
 Click on the [button label="Expense Desk" background="#444CE7"](tab-0) tab.
 This time, Expense Desk opens in its own browser window.
 Signing in sends you to Keycard and then GitHub, and GitHub's sign-in page can't load inside the lab.
 
-Click on **Sign in** and sign in with your GitHub account.
-When you return to Expense Desk, ask the agent:
+Signing in to the Keycard console in Exercise 02 did not sign you in to Expense Desk.
+
+Click the **Sign in** button in the upper right corner of Expense Desk and sign in with your GitHub account. When you return to Expense Desk, ask the agent:
 
 ```text
 Which account am I using, and what is my approval limit?
@@ -75,7 +76,7 @@ They never become verified later.
 
 Now that you're signed in, you'll test what your agent is allowed to approve for you.
 
-## Step 2: Testing what the agent can approve
+## Step 2: Test what the agent can approve
 
 File a new $75 expense with any memo, for example:
 
@@ -105,62 +106,60 @@ It checks who owns the expense and enforces that rule, no matter what the agent 
 
 Now that you've seen the refusal, you'll approve an expense that isn't yours.
 
-## Step 3: Approving a partner's expense
+## Step 3: Approve (or reject) someone else's expense
 
-Swap expense IDs with the person next to you.
+In Expense Desk, choose **All expenses** and click **Refresh**. Select someone else's expense with **Pending** status and an amount within your $100 approval limit. If none are available, watch the instructor's demo or wait for another attendee to submit one and refresh again.
 
-Choose **All expenses**, select your partner's pending expense, and click on **Approve**.
-The button sends `Approve expense EXPENSE-ID` through the same agent conversation, so you could also type the request yourself.
+Decide whether to approve or reject the selected expense, then click **Approve** or **Reject**.
+The button sends `Approve expense EXPENSE-ID` or `Reject expense EXPENSE-ID` through the same agent conversation, so you can also type your chosen request.
 
-After your partner decides your expense, click on **Refresh** to see their decision.
-Your own chat refreshes your view after each turn, but it won't show your partner's changes until you refresh.
+If another attendee decides your expense, click on **Refresh** to see their decision.
+Your own chat refreshes your view after each turn, but it won't show another attendee's changes until you refresh.
 
-In the expense's **Activity** section, compare **Created by** with the actor who decided it.
+In Expense Desk, open the expense's **Activity** section and compare **Created by** with the actor who decided it.
 Expand **Identity details** to see the full actor ID.
-Partner approval should succeed, and self-approval should fail with a reason.
+Your approval or rejection of someone else's eligible expense should succeed, and self-approval should fail with a reason.
 
 Ask the agent for your approval limit one more time.
 The expected limit for attendees is $100.
 
-Now that you've approved an expense as yourself, you'll trace how your identity traveled through the system.
+Now that you've recorded a decision as yourself, you'll trace how your identity traveled through the system.
 
-## Step 4: Following the credential requests
+## Step 4: Follow the credential requests
 
 Your request went through two hops: from your agent to the MCP server, and from the MCP server to the Ledger API.
 Each hop has its own credential request in Keycard, and you can follow both.
 
 Start with the first hop.
-In the [button label="Keycard" background="#444CE7"](tab-1) tab, open **Applications > Agent App - YOUR-GITHUB-HANDLE > Activity**.
+In the [button label="Keycard" background="#444CE7"](tab-1) tab, open **Applications → Agent App - \<your-github-handle> → Activity**.
 
-1. Open **Filters > Clear** to remove earlier filters, and choose a time range that includes your run.
-2. Open **Filters > Actor**, search for your GitHub email, and select the matching person.
+1. Open **Filters → Clear** to remove earlier filters.
+2. Open **Filters → Actor**, search for your GitHub email, and select the matching person.
    Actor includes applications acting on that person's behalf.
-3. Set **Filters > Resource > Expense MCP Resource**.
+3. Set **Filters → Resource → Expense MCP Resource**.
 4. Open a **Credential Issued** event labeled `urn:ietf:params:oauth:grant-type:token-exchange`.
 5. Check that **Delegation Chain** shows your agent application on behalf of your email, and that **Resource** is **Expense MCP Resource**.
-6. In the event's **Overview**, copy **Session**. Close the panel, open **Filters > Session**, paste the ID under **Or enter an ID**, and click on **Apply**.
-
-The session ID narrows the feed to your signed-in run.
-A session can contain several tool calls.
 
 Next, follow the second hop.
-Open **Applications > Expense MCP Actor > Activity**.
-Switching applications clears the filters, so set **Actor** to your email and **Session** to the same ID again.
+Stay in the Keycard console and open **Applications → Expense MCP Actor → Activity**.
+Switching applications clears the filters, so set **Actor** to your email again.
 Then set **Resource** to **Ledger API**.
 
 Open the **Credential Issued** event, again labeled `urn:ietf:params:oauth:grant-type:token-exchange`.
-Check that **Delegation Chain** shows **Expense MCP Actor on behalf of** your email, that **Resource** is **Ledger API**, and that **Overview** shows the same **Session**.
+Check that **Delegation Chain** shows **Expense MCP Actor on behalf of** your email and **Resource** is **Ledger API**.
 
 Here's what happened across those two hops.
 In the first exchange, your agent traded your sign-in token for a token addressed to Expense MCP.
 In the second, Expense MCP Actor traded that token for one addressed to the Ledger API.
 Your identity carried through both hops, while the application making each request changed.
 
-**Note:** Each hop has its own **Request ID**, so use Actor and Session to follow a request across hops. If you can't find the chain, ask an instructor to help trace a known event.
+**Optional:** To narrow the events to one signed-in session, copy **Session** from an event’s **Overview** and apply it under **Filters → Session** in both applications’ Activity tabs.
+
+If you can't find the expected delegation chain, ask the instructor for help.
 
 ## Conclusion
 
-You signed in to Expense Desk, approved a partner's expense, and watched Expense Desk refuse to let you approve your own.
+You signed in to Expense Desk, approved or rejected someone else's expense, and watched Expense Desk refuse to let you approve your own.
 In Keycard, you followed your identity across two token exchanges, from your agent to the MCP server and on to the Ledger API.
 
 You can now tell who asked for access and which application acted on their behalf.

@@ -49,7 +49,7 @@ Everyone in this room holds that key.
 
 In this exercise, you'll submit an expense, review someone else's, and then try to work out who did what.
 
-## Step 1: Opening Expense Desk
+## Step 1: Open Expense Desk
 
 Your sandbox has already started Expense Desk and the MCP server for you.
 Click on the [button label="Expense Desk" background="#444CE7"](tab-0) tab to open it.
@@ -60,7 +60,7 @@ A fresh environment starts empty, so don't worry if the list is blank when you f
 
 Now that Expense Desk is open, you'll submit your first expense.
 
-## Step 2: Submitting an expense
+## Step 2: Submit an expense
 
 Ask the Expense Desk agent to submit an expense in the chat.
 Choose your own amount and description.
@@ -80,7 +80,7 @@ You'll use it later to find your expense.
 
 Now that you've filed an expense, you'll review one that belongs to someone else.
 
-## Step 3: Reviewing another attendee's expense
+## Step 3: Review another attendee's expense
 
 Choose **All expenses** and click on **Refresh** to see what other attendees have submitted.
 If everyone is still typing, wait a moment and refresh again.
@@ -98,17 +98,17 @@ If someone else has already reviewed that expense, refresh and choose another pe
 
 Now that you've reviewed an expense, it's time to see what the system recorded about it.
 
-## Step 4: Reading the expense history
+## Step 4: Read the expense history
 
 In Expense Desk, select the expense you reviewed.
-Its details panel has an **Activity** section, which records every action taken on that expense.
+In Expense Desk, its details panel has an **Activity** section, which records every action taken on that expense.
 Then find your original submission and click on **Refresh** to see whether someone has reviewed it yet.
 
 Look at both records and ask yourself two questions.
 Can you tell who submitted each expense, or who approved or rejected it?
 What connects the recorded names to the people in this room?
 
-In that panel, compare **Created by** with **Activity > Identity details > Actor ID**.
+In that panel, compare **Created by** with **Activity → Identity details → Actor ID**.
 **Created by** shows the name someone supplied with the expense.
 **Actor ID** shows `API key: ********`, the shared credential that granted access.
 
