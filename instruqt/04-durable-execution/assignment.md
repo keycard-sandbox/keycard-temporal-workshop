@@ -65,7 +65,7 @@ In this exercise, you'll see that the Expense Desk agent already runs this way.
 Then you'll run a smaller Workflow with the same shape, stop its Worker partway through, and watch it finish without repeating a step.
 Finally, you'll check that no credentials ended up in the Event History.
 
-## Step 1: Reading your agent as a Workflow
+## Step 1: Read your agent as a Workflow
 
 Expense Desk has an autonomous reviewer that checks new expenses and approves the small ones.
 That reviewer is a Temporal *Workflow*, a function whose progress Temporal records.
@@ -120,7 +120,7 @@ It reviews every new expense in the shared Ledger API, including yours.
 
 Now that you've seen the agent's shape, you'll run a smaller Workflow with the same shape, one you can interrupt on purpose.
 
-## Step 2: Reading the settlement code
+## Step 2: Read the settlement code
 
 Once an expense is approved, it has to be paid.
 The settlement Workflow does that in two steps, and it's small enough to stop at the exact moment you choose.
@@ -185,31 +185,21 @@ A *Worker* is the process that runs your Workflow and Activity code.
 The `KeycardInterceptor` runs before each Activity and gets a fresh token for every Activity that has a `@grant`.
 The token never goes into the Activity's input or result, so it never reaches the Event History.
 
-Now that you've seen the code, you'll give the Worker its credentials.
+Now that you've seen the code, revisit the Worker's identity in Keycard.
 
-## Step 3: Adding the Worker's credentials
+## Step 3: Find the Worker's identity in Keycard
 
-The Worker uses its own Keycard application, **Temporal Worker**, so it needs its own client ID and secret.
-The instructors will share them with the room.
+In the [button label="Keycard" background="#444CE7"](tab-4) tab, open **Applications → Temporal Worker**, the application you saw in Exercise 02.
+The Worker uses this identity to request credentials for **Ledger API**, without your browser sign-in.
 
-Open `temporal/.env` in the [button label="Editor" background="#444CE7"](tab-3) tab and set these two lines:
+Your Instruqt sandbox already has the Worker's client ID and secret configured in `temporal/.env`.
+No editing is needed. Leave the Keycard registration unchanged.
 
-```dotenv,nocopy
-WORKER_KEYCARD_CLIENT_ID=WORKER-CLIENT-ID
-WORKER_KEYCARD_CLIENT_SECRET=WORKER-CLIENT-SECRET
-```
+The sandboxes share one Worker identity for this workshop. Preconfiguring its credentials keeps setup short; it doesn't give each attendee a distinct workload identity.
 
-Leave the other lines alone; your sandbox already filled them in.
-Save the file.
+Now start the Worker.
 
-Notice what just happened.
-Everyone in the room now holds the same Worker secret, which is the shared-key problem from Exercise 01 all over again.
-We did it here to keep setup fast.
-In production, each deployment gets its own workload identity through Workload Identity Federation (WIF for short), and Keycard issues credentials to that identity, so there's no secret to pass around.
-
-Now that the Worker has credentials, you'll start it.
-
-## Step 4: Starting the Worker
+## Step 4: Start the Worker
 
 Click on the [button label="Worker" background="#444CE7"](tab-1) tab and type the following command:
 
@@ -218,7 +208,7 @@ uv run --locked --env-file .env demo.py worker
 ```
 
 The `--locked` flag runs the code with the exact package versions from the lockfile.
-The `--env-file .env` flag loads the Worker's settings from `temporal/.env`, including the credentials you just added.
+The `--env-file .env` flag loads the Worker's settings from `temporal/.env`, including the preconfigured Worker credentials.
 The `worker` argument tells `demo.py` to start a Worker.
 
 You should see a line like this one:
@@ -232,7 +222,7 @@ Leave it running.
 
 Now that a Worker is ready, you'll give it a settlement to run.
 
-## Step 5: Starting a settlement
+## Step 5: Start a settlement
 
 Click on the [button label="Client" background="#444CE7"](tab-2) tab and type the following command:
 
@@ -254,13 +244,15 @@ Go back to the [button label="Worker" background="#444CE7"](tab-1) tab.
 You'll see a log line containing `debited 4200 with a token minted for this call`.
 That's the debit Activity running once.
 
+Click on the [button label="Temporal UI" background="#444CE7"](tab-0) tab and open your Workflow.
+If you don't see your workflow listed, click the Refresh link at the top of the UI.
+In Event History, select the **All** view, which lists every event by name.
+Find **ActivityTaskCompleted** for the debit, followed by **TimerStarted**.
+The debit is done, and Temporal has recorded its result.
+
 Now that the debit has run, it's time to interrupt the Workflow.
 
-## Step 6: Stopping the Worker mid-settlement
-
-Click on the [button label="Temporal UI" background="#444CE7"](tab-0) tab and open your Workflow.
-In its Event History, find **ActivityTaskCompleted** for the debit, followed by **TimerStarted**.
-The debit is done, and Temporal has recorded its result.
+## Step 6: Stop the Worker mid-settlement
 
 Now click on the [button label="Worker" background="#444CE7"](tab-1) tab and press `CTRL+C` to stop the Worker.
 
@@ -274,7 +266,7 @@ Temporal fired the Timer on its own, with no Worker running.
 
 Now that the Timer has fired with no Worker around, you'll bring the Worker back.
 
-## Step 7: Restarting the Worker
+## Step 7: Restart the Worker
 
 In the [button label="Worker" background="#444CE7"](tab-1) tab, type the same command again:
 
@@ -316,7 +308,7 @@ Either way, you saw the result in this exercise: the Worker went away, and the W
 
 Now that you know why durability matters, you'll check where the credentials ended up.
 
-## Step 8: Keeping secrets out of history
+## Step 8: Keep secrets out of history
 
 Temporal keeps a Workflow's Event History for the namespace's retention period, and anyone who can read the Workflow can see what's in it.
 So anything sensitive should stay out of it.
@@ -346,7 +338,7 @@ Temporal gives you two ways to keep sensitive data out of Event History:
 - A **Payload Codec** encrypts the data that does go into history. Your Workers encrypt each input and result before it leaves the process, so the Temporal Service only stores ciphertext. A *Codec Server* that you run decrypts the data for the Temporal UI and CLI, and Temporal never holds your keys.
 
 Finally, look at the same run from Keycard's side.
-In the [button label="Keycard" background="#444CE7"](tab-4) tab, open **Applications > Temporal Worker > Activity**.
+In the [button label="Keycard" background="#444CE7"](tab-4) tab, open **Applications → Temporal Worker → Activity**.
 This **Activity** tab is Keycard's log of credential requests, not a Temporal Activity.
 Find the Ledger API credential issued before you stopped the Worker, and the one issued after you restarted it.
 Keycard records who got a credential and when, and Temporal records what the Workflow did.
