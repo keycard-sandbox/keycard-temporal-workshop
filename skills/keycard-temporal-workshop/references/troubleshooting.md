@@ -8,7 +8,7 @@ Apply the smallest repair supported by the evidence. Restart the affected proces
 
 ## UserInfo access denied
 
-A denial naming an attendee application on OpenID Connect UserInfo requires instructor inspection of shared policy. Keep the three documented dependencies; UserInfo may be visible in Resources but unavailable in the dependency picker. Do not ask attendees to add it, create a replacement, remove `openid email`, or reset a checkpoint. Capture the event ID and timestamp; retry the original call after the instructor repairs access. Adding access only for Expense MCP Actor does not repair the named application subject's denial.
+For a denial naming an attendee application on OpenID Connect UserInfo, check that application's dependencies. If UserInfo is missing, guide the attendee to **Dependencies → Add dependency** and select the UserInfo resource. Retry the original operation. If access still fails, capture the event ID and timestamp for the instructor. Follow the attendee troubleshooting guide.
 
 ## Instructor handoff
 

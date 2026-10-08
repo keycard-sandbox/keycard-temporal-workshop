@@ -43,7 +43,7 @@ Use your GitHub handle wherever you see `<githubhandle>`, without the angle brac
 
    | Field | Value |
    | --- | --- |
-   | Name | `Expense Desk Agent - <githubhandle>` |
+   | Name | `Agent App - <githubhandle>` |
    | Identifier | `urn:agent:app:<githubhandle>` |
    | Consent | Implicit |
    | Redirect URI | Local: `http://localhost:8400/callback`. Instruqt: the exact URL from `CALLBACK_URL.txt`. |
@@ -57,7 +57,7 @@ Keep the `urn:agent:app:` prefix exactly. The workshop's shared Ledger API polic
 
 For local use, register `http://localhost:8400/callback`, matching `EXPENSE_DESK_ORIGIN=http://localhost:8400`. In Instruqt, run `cat CALLBACK_URL.txt` from the package root and register that exact HTTPS URL; keep the matching `EXPENSE_DESK_ORIGIN` supplied in `agent/.env`. The callback returns your browser to Expense Desk after sign-in.
 
-The application name distinguishes software from people in Activity. Keep the literal identifier prefix unchanged.
+Use the short application name `Agent App - <githubhandle>` so GitHub handles remain readable in the Keycard UI. Keep the literal identifier prefix unchanged.
 
 ## Create the resource your application provides
 
@@ -71,9 +71,9 @@ Create the resource that identifies your agent as the destination for your sign-
    | Name | `Agent Resource - <githubhandle>` |
    | Identifier | `urn:agent:resource:<githubhandle>` |
    | Credential provider | Zone Provider |
-   | Provided by Application | `Expense Desk Agent - <githubhandle>` |
+   | Provided by Application | `Agent App - <githubhandle>` |
 
-3. Save the resource. Open its **Scopes** tab and leave the scope list empty. This resource supplies the audience for sign-in and onward exchange. Expense MCP and Ledger API use their own operation scopes on later hops.
+3. Save the resource.
 4. Return to your application and inspect **Provides**. Your resource should already appear because you selected **Provided by Application** during creation. This links the destination to the application that serves it and can exchange tokens addressed to it.
 
 Choose **Zone Provider** because the workshop services validate Keycard-issued tokens. Credential providers determine what Keycard returns for a resource:
@@ -90,19 +90,22 @@ GitHub participates in sign-in; that is distinct from choosing who issues a reso
 
 **Provides** means "my application serves this resource." **Depends** means "my application requests credentials for this resource." These point in different directions: receiving a token does not by itself authorize every downstream call.
 
-On your application, open **Dependencies**, click **Add dependency**, and connect these three resources:
+On your application, open **Dependencies**, click **Add dependency**, and add these four resources:
 
 | Resource | Identifier | Why your Expense Desk agent needs it |
 | --- | --- | --- |
 | Your Expense Desk agent resource | `urn:agent:resource:<githubhandle>` | Sign-in requests a subject token for this audience. |
 | Expense MCP Resource (already configured by instructor) | `http://localhost:8100/mcp` | Your Expense Desk agent calls the expense tools. |
 | LLM API resource (already configured by instructor) | `https://api.openai.com` | Your Expense Desk agent requests the LLM credential from Keycard's vault. |
+| OpenID Connect UserInfo | Select the UserInfo resource. | Retrieves the signed-in user’s email from Keycard. |
+
+**OpenID Connect UserInfo** lets Expense Desk retrieve the signed-in user’s email from Keycard. Select the UserInfo resource.
 
 Your Expense Desk agent application needs two connections to its own resource:
 
 The Dependencies connection lets the agent request a subject token when you sign in. The Provides connection lets it exchange that token for credentials to call Expense MCP on your behalf.
 
-Each attendee creates a separate agent resource. Everyone uses the same Expense MCP and LLM API resources.
+Each attendee creates a separate agent resource. Everyone uses the same Expense MCP, LLM API, and UserInfo resources.
 
 Your agent's dependencies are now set. The MCP application handles Ledger API access, and the instructor manages its shared configuration. Leave that configuration unchanged.
 
@@ -153,8 +156,8 @@ Zone Provider means Keycard issues credentials for your agent resource. Select t
 Before switching to application authentication, confirm:
 
 - Your app identifier starts with `urn:agent:app:` and uses your GitHub handle.
-- Your resource uses Zone Provider, has no scopes, and your app provides it.
-- Your app depends on your resource, Expense MCP, and the supplied LLM resource.
+- Your resource uses Zone Provider, and your app provides it.
+- Your app depends on your resource, Expense MCP, LLM API, and OpenID Connect UserInfo.
 - Your app has Implicit consent and the exact callback URL.
 - Your `.env` contains your own credential pair and resource identifier.
 
@@ -194,7 +197,7 @@ Use the absolute package path you resolved during setup in place of `<package-pa
 
 1. In **Expense Desk browser chat**, enter "Which account am I using, and what is my approval limit?"
 2. Ask it to file a new $75 workshop expense under someone else's name. Save the expense ID and read Created by in the agent’s confirmation. The Expense Desk agent should record your registered application regardless of the provided name.
-3. In the **Keycard console**, open **Applications → Expense Desk Agent - <your GitHub username> → Activity**. Clear earlier filters with **Filters → Clear** and set **Resource → Expense MCP Resource**. Inspect **Credential Issued** for your application. This initial credential uses client credentials and identifies your application.
+3. In the **Keycard console**, open **Applications → Agent App - <your GitHub username> → Activity**. Clear earlier filters with **Filters → Clear** and set **Resource → Expense MCP Resource**. Inspect **Credential Issued** for your application. This initial credential uses client credentials and identifies your application.
 4. With the instructor, open **Applications → Expense MCP Actor → Activity**, clear old filters, and set **Resource → Ledger API**. The onward event is **Credential Issued**, labeled `urn:ietf:params:oauth:grant-type:token-exchange`. Inspect its delegation details to confirm the application subject from this demonstration.
 
 Expense MCP Actor authenticates as the MCP server and exchanges the token it received for a token addressed to the Ledger API. This feed contains credential requests from the whole workshop. Follow the instructor's selected example and confirm its application subject in the delegation details.

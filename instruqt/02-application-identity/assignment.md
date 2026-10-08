@@ -145,7 +145,7 @@ Enter the following values, using your own GitHub handle:
 
 | Field | Value |
 | --- | --- |
-| Name | `Expense Desk Agent - YOUR-GITHUB-HANDLE` |
+| Name | `Agent App - YOUR-GITHUB-HANDLE` |
 | Identifier | `urn:agent:app:YOUR-GITHUB-HANDLE` |
 | Consent | Implicit |
 | Redirect URI | The callback URL from Step 3 |
@@ -177,12 +177,9 @@ Enter the following values:
 | Name | `Agent Resource - YOUR-GITHUB-HANDLE` |
 | Identifier | `urn:agent:resource:YOUR-GITHUB-HANDLE` |
 | Credential provider | Zone Provider |
-| Provided by Application | `Expense Desk Agent - YOUR-GITHUB-HANDLE` |
+| Provided by Application | `Agent App - YOUR-GITHUB-HANDLE` |
 
 Save the resource.
-Open its **Scopes** tab and leave the scope list empty.
-This resource only supplies the audience for sign-in and the exchanges that follow.
-Expense MCP and the Ledger API use their own scopes on later hops.
 
 Return to your application and look at **Provides**.
 Your resource should already appear there, because you picked **Provided by Application** when you created it.
@@ -202,19 +199,22 @@ Now that your application provides a resource, you'll tell Keycard which resourc
 They point in opposite directions.
 Receiving a token doesn't, by itself, allow every call that comes after it.
 
-On your application, open **Dependencies**, click on **Add dependency**, and connect all three of these resources:
+On your application, open **Dependencies**, click on **Add dependency**, and add these four resources:
 
 | Resource | Identifier | Why your agent needs it |
 | --- | --- | --- |
 | Your agent resource | `urn:agent:resource:YOUR-GITHUB-HANDLE` | Sign-in requests a subject token for this audience. |
 | Expense MCP Resource | `http://localhost:8100/mcp` | Your agent calls the expense tools. |
 | LLM API | `https://api.openai.com` | Your agent gets the model credential from Keycard's vault. |
+| OpenID Connect UserInfo | Select the UserInfo resource. | Retrieves the signed-in user’s email from Keycard. |
+
+**OpenID Connect UserInfo** lets Expense Desk retrieve the signed-in user’s email from Keycard. Select the UserInfo resource.
 
 Your agent now connects to its own resource twice.
 The **Depends** connection lets it request a subject token when you sign in.
 The **Provides** connection lets it exchange that token for credentials to call Expense MCP for you.
 
-Everyone creates their own agent resource, but the whole room shares the Expense MCP and LLM API resources.
+Everyone creates their own agent resource, but the whole room shares the Expense MCP, LLM API, and UserInfo resources.
 The MCP application handles Ledger API access, and the instructors manage that shared setup, so leave it unchanged.
 
 Now that your registrations are connected, you'll create the credentials your agent uses to prove who it is.
@@ -252,8 +252,8 @@ The [Keycard CLI](https://docs.keycard.ai/cli/) is another option that hands cre
 Before you continue, check your registration against this list:
 
 - Your application identifier starts with `urn:agent:app:` and uses your GitHub handle.
-- Your resource uses Zone Provider, has no scopes, and your application provides it.
-- Your application depends on your resource, Expense MCP, and the LLM API resource.
+- Your resource uses Zone Provider, and your application provides it.
+- Your application depends on your resource, Expense MCP, LLM API, and OpenID Connect UserInfo.
 - Your application has Implicit consent and the exact callback URL from Step 3.
 - `agent/.env` holds your own credential and resource identifier.
 
@@ -352,7 +352,7 @@ Save the expense ID and read **Created by** in the agent's confirmation.
 It should show your registered application, whatever name you typed.
 
 Now look at the same request from Keycard's side.
-In the [button label="Keycard" background="#444CE7"](tab-1) tab, open **Applications > Expense Desk Agent - YOUR-GITHUB-HANDLE > Activity**.
+In the [button label="Keycard" background="#444CE7"](tab-1) tab, open **Applications > Agent App - YOUR-GITHUB-HANDLE > Activity**.
 Clear any earlier filters with **Filters > Clear**, then set **Resource > Expense MCP Resource**.
 Open a **Credential Issued** event for your application.
 This credential came from a client credentials grant, and it identifies your application.

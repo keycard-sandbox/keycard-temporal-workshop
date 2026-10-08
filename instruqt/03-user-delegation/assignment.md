@@ -130,7 +130,7 @@ Your request went through two hops: from your agent to the MCP server, and from 
 Each hop has its own credential request in Keycard, and you can follow both.
 
 Start with the first hop.
-In the [button label="Keycard" background="#444CE7"](tab-1) tab, open **Applications > Expense Desk Agent - YOUR-GITHUB-HANDLE > Activity**.
+In the [button label="Keycard" background="#444CE7"](tab-1) tab, open **Applications > Agent App - YOUR-GITHUB-HANDLE > Activity**.
 
 1. Open **Filters > Clear** to remove earlier filters, and choose a time range that includes your run.
 2. Open **Filters > Actor**, search for your GitHub email, and select the matching person.
