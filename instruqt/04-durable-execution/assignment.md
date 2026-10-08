@@ -172,10 +172,10 @@ Finally, find where the Worker is created:
 
 ```python
 interceptors=[
-    # Use the settlement identity explicitly, separate from agent credentials.
+    # Use the Temporal worker identity explicitly, separate from agent credentials.
     KeycardInterceptor(
         zone_url=os.environ["KEYCARD_ISSUER"],
-        credential=ClientSecret((client_id, client_secret)),
+        application_credential=ClientSecret((client_id, client_secret)),
     )
 ],
 ```
