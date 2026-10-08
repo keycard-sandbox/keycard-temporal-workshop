@@ -13,6 +13,7 @@ from datetime import timedelta
 from temporalio import activity, workflow
 from temporalio.client import Client
 from temporalio.common import RetryPolicy
+from temporalio.exceptions import ApplicationError
 from temporalio.worker import Worker
 
 from keycardai.temporal import KeycardInterceptor, access, grant
@@ -46,7 +47,8 @@ def _assert_aud(token: str) -> None:
     if isinstance(aud, str):
         aud = [aud]
     if not isinstance(aud, list) or RESOURCE not in aud:
-        raise ValueError("Minted credential has the wrong audience")
+        # Non-retryable: retrying can't fix a misconfigured resource, and the retry policy has no attempt limit.
+        raise ApplicationError("Minted credential has the wrong audience", non_retryable=True)
 
 
 @grant(RESOURCE)
