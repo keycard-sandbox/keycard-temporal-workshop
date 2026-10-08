@@ -3,7 +3,8 @@ slug: user-delegation
 id: 9vxqvyeiktom
 type: challenge
 title: 'Exercise 03: User delegation'
-teaser: Sign in, approve or reject someone else's expense, and watch Expense Desk refuse your own.
+teaser: Sign in, approve or reject someone else's expense, and watch Expense Desk
+  refuse your own.
 notes:
 - type: text
   contents: |-
