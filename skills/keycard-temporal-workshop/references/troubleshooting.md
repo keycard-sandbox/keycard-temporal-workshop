@@ -6,6 +6,10 @@ Run preflight for local configuration, then inspect the relevant evidence: Keyca
 
 Apply the smallest repair supported by the evidence. Restart the affected process after `.env` edits and retry the original operation once. If it still fails, investigate the new evidence rather than repeating the same fix. Keep expected exercise refusals intact and route shared-service changes to the instructor.
 
+## UserInfo access denied
+
+For a denial naming an attendee application on OpenID Connect UserInfo, open that application's dependencies in the Keycard console. If UserInfo is missing, guide the attendee to **Dependencies → Add dependency** and select the UserInfo resource. Return to Expense Desk and retry the original operation. If access still fails, capture the event ID and timestamp for the instructor. Follow the attendee troubleshooting guide.
+
 ## Instructor handoff
 
 Prepare a redacted summary of the exercise, operation, environment, timestamp, error, failing resource, relevant event or workflow ID, and checks performed. Identify the shared setting that needs inspection and distinguish hypotheses from confirmed causes. Let the attendee share the summary unless they authorize you to send it.
@@ -14,4 +18,4 @@ For checkpoint recovery, follow the exercise guide and preserve local edits befo
 
 ## Activity or creation controls unavailable
 
-In this workshop, missing Activity access or application/resource creation controls can mean you still have the Viewer role. Ask the instructor to grant Admin access, then refresh the console. Don't modify another attendee's registration to work around missing permissions.
+In this workshop, missing Activity access or application/resource creation controls can mean you still have the Viewer role. Ask the instructor to grant Admin access, then refresh the Keycard console. Don't modify another attendee's registration to work around missing permissions.

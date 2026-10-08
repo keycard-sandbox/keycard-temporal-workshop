@@ -11,6 +11,8 @@ Use fresh expenses and an isolated environment. Provisioning instructions are in
 
 ## Use Keycard for your own projects
 
-Open [Keycard Workshop Registration](https://keycard-workshop-registration.fly.dev/) and enter the five-character access code supplied privately by your instructor. Sign in with GitHub, then choose **Continue to Keycard** to finish personal signup with the same verified primary email.
+Open [Keycard Workshop Registration](https://keycard-workshop-registration.fly.dev/) and enter the five-character access code supplied privately by your instructor. Sign in with GitHub, then choose **Continue to Keycard** to finish personal signup.
 
-This is separate from the workshop organization's SSO link in Exercise 02. Personal signup does not join that organization or copy its applications, resources, credentials, or shared services into your own environment. Keep using the workshop SSO link for the exercises.
+This creates your own Keycard organization for personal use. It's separate from the workshop organization's SSO link in Exercise 02. Personal signup does not join that organization or copy its applications, resources, credentials, or shared services into your own environment. Keep using the workshop SSO link for the exercises.
+
+You can use your personal Keycard org for agent identity and access with your own projects. Learn more about Keycard's capabilities in the [Keycard docs here](https://docs.keycard.ai).

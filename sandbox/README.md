@@ -30,7 +30,9 @@ Set these in the Instruqt web UI. They reach lifecycle scripts only, and setup w
 | `KEYCARD_WORKSHOP_LEDGER_API_KEY` | `mcp-server/.env` `LEDGER_API_KEY` |
 | `KEYCARD_WORKSHOP_MCP_CLIENT_ID`, `KEYCARD_WORKSHOP_MCP_CLIENT_SECRET` | `mcp-server/.env` |
 
-The Temporal Worker credentials aren't Instruqt secrets. The instructors hand them out during Exercise 04, and attendees add `WORKER_KEYCARD_CLIENT_ID` and `WORKER_KEYCARD_CLIENT_SECRET` to `temporal/.env` themselves.
+The Temporal Worker client ID and secret must also be provisioned through Instruqt secrets and written by setup to `temporal/.env` as `WORKER_KEYCARD_CLIENT_ID` and `WORKER_KEYCARD_CLIENT_SECRET`. Mason owns the secret names, provisioning, and setup-script wiring. Attendees do not enter these credentials during Exercise 04.
+
+Pending integration: the current local `instruqt/track_scripts/setup-workshop` still writes the Worker fields blank. Before deploying the revised assignment, complete that wiring and verify both fields are populated in a fresh sandbox without displaying their values. Setup preserves existing `.env` files, so an existing sandbox with blank fields will not be repaired by simply rerunning setup.
 
 Blank secrets don't stop the sandbox. Setup writes empty values, warns that Expense Desk isn't running, and leaves Temporal, the editor and the terminals up. Fill in the values and run `workshop-services start`.
 

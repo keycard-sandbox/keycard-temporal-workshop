@@ -1,7 +1,7 @@
 <!-- Generated from docs/attendee/ex01.md. Edit the source, then rebuild. -->
 # Exercise 01: missing identity
 
-Submit an expense, review someone else's, then see whether Activity can tell you who did what.
+Submit an expense, review someone else's, then see whether Expense Desk's Activity can tell you who did what.
 
 A fresh environment starts empty. Everyone using the same Ledger API shares its data, so you will see submissions and decisions as people work. Existing submissions remain when authentication changes. For this exercise, create your own expense and review another attendee's new submission.
 
@@ -21,7 +21,7 @@ A fresh environment starts empty. Everyone using the same Ledger API shares its 
 
 ## Inspect Activity
 
-Select the expense you reviewed and inspect Activity. Then find your original submission and click Refresh to see whether someone has reviewed it.
+In Expense Desk, select the expense you reviewed and inspect its **Activity** section. Then find your original submission and click Refresh to see whether someone has reviewed it.
 
 Can you tell who submitted each expense or who approved or denied it? What connects the recorded names to the people in the room?
 

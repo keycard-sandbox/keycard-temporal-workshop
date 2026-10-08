@@ -9,18 +9,20 @@ Stop the browser and starter MCP processes.
 
 1. Visit [the workshop SSO link](https://id.keycard.ai/openid/connect/login?tenant=v6f1suvmlhp7k4a21bzyqp80w3&iss=https%3A%2F%2Fkeycard-temporal-workshop.us.auth0.com%2F&target_link_uri=https%3A%2F%2Fconsole.keycard.ai).
 2. Sign in with your GitHub account. On your first join, complete both consent prompts: authorize access through GitHub, then authorize Keycard. New workshop members start with Viewer access.
-3. You should see "Workshop AIE NYC" in the upper left corner after signing in.
+3. In the Keycard console, you should see "Workshop AIE NYC" in the upper left corner after signing in.
 4. Tell Kim when you've joined. Kim will grant Admin access to create your agent registration and inspect Activity. After Kim confirms, refresh Keycard and check that you can see buttons to create applications and resources. Contact Kim if the controls are missing.
 
 Use this same workshop SSO link to join for the first time and to sign back in whenever you are logged out. Bookmark it. Workshop accounts cannot sign in through `console.keycard.ai` directly; the SSO link takes you to the console after authentication. If you have trouble accessing Keycard, ask an instructor.
 
 You can see other attendees' registrations because everyone uses the same Keycard organization and shared services.
 
-## Look around Keycard
+## Tour the Keycard console
 
-Open Applications, Resources, and Providers. Your instructors have configured the shared Expense MCP Actor application and the Expense MCP Resource, Ledger API, and LLM API resources. Look at `Agent App - Example` and `Agent Resource - Example` for a preview of the registrations you'll create for your agent. In Keycard, the Expense Desk backend appears as **Ledger API**.
+In the Keycard console, browse **Applications**, **Resources**, and **Providers**. Your instructors have configured the shared Expense MCP Actor application and the Expense MCP Resource, Ledger API, and LLM API resources. The Expense Desk backend appears as **Ledger API**.
 
-Applications, Resources, and Providers open on **Activity**, where you can inspect credential requests. Open the `Agent App - Example` application's Activity and look at the existing logs. Use the gear icon in the upper right to view settings such as name and identifier. You'll inspect your own Expense Desk agent's credential requests later.
+In the Keycard console, open Applications → **Agent App - Example** and Resources → **Agent Resource - Example** to preview what you're about to create. Each application, resource, and provider opens on its **Activity** tab, where you can see credential requests. (Note: this is separate from the **Activity** section on each expense in Expense Desk, which records what happened to that expense.) The gear icon in the upper right shows settings such as name, identifier, etc.
+
+In the Keycard console, open Resources → **Expense MCP Resource**. Its configured scopes are `expense:read`, `expense:write`, `expense:approve`, and `expense:settle`. Your agent requests the scope for the expense tool it calls. The instructors configured this shared resource; leave its settings unchanged.
 
 ### Applications and resources
 
@@ -32,85 +34,89 @@ Now follow the request one step further. The MCP server receives the token addre
 
 The **Temporal Worker** application identifies the background program that runs jobs assigned by Temporal. Temporal tracks the job’s progress, and the worker uses Keycard to obtain credentials for Ledger API when it needs access. The instructors manage this registration, so leave it unchanged.
 
-## Create your application
+## Create your application in Keycard
 
 Start with your agent's application registration. Then you'll create its resource and connect the two so the agent can act on your behalf after you sign in with GitHub.
 
-Use your GitHub handle wherever you see `<githubhandle>`, without the angle brackets or `@`. Keep the same spelling throughout. Each attendee needs unique identifiers since you're working in a shared space.
+Use your GitHub handle wherever you see `<your-github-handle>`, without the angle brackets or `@`. Keep the same spelling throughout. Each attendee needs unique identifiers since you're working in a shared space.
 
-1. Open **Applications** and click **Add Application**.
+1. In the Keycard console, open **Applications** and click **Add Application**.
 2. Enter the following values, using your own handle.
 
    | Field | Value |
    | --- | --- |
-   | Name | `Expense Desk Agent - <githubhandle>` |
-   | Identifier | `urn:agent:app:<githubhandle>` |
+   | Name | `Agent App - <your-github-handle>` |
+   | Identifier | `urn:agent:app:<your-github-handle>` |
    | Consent | Implicit |
-   | Redirect URI | Local: `http://localhost:8400/callback`. Instruqt: the exact URL from `CALLBACK_URL.txt`. |
+   | Redirect URL | Local: `http://localhost:8400/callback`. Instruqt: the exact URL from `CALLBACK_URL.txt`. |
 
 
    Leave **Proxy MCP tools** off. That option creates a gateway that exposes tools from upstream MCP servers through one generated endpoint. Here Expense Desk calls the supplied Expense MCP endpoint directly; its SDK authentication and onward Ledger API exchange are the behavior you are learning. See [Proxy MCP Tools](https://docs.keycard.ai/admin/unified-access-gateway/).
 
 3. Create the application.
 
-Keep the `urn:agent:app:` prefix exactly. The workshop's shared Ledger API policy matches this prefix.
-
 For local use, register `http://localhost:8400/callback`, matching `EXPENSE_DESK_ORIGIN=http://localhost:8400`. In Instruqt, run `cat CALLBACK_URL.txt` from the package root and register that exact HTTPS URL; keep the matching `EXPENSE_DESK_ORIGIN` supplied in `agent/.env`. The callback returns your browser to Expense Desk after sign-in.
 
-The application name distinguishes software from people in Activity. Keep the literal identifier prefix unchanged.
+Use the short application name `Agent App - <your-github-handle>` so GitHub handles remain readable in the Keycard UI. Keep the literal identifier prefix unchanged.
 
-## Create the resource your application provides
+## Create your resource in Keycard
 
-Create the resource that identifies your agent as the destination for your sign-in token. When the agent presents this token to Keycard for exchange, we call it the **subject token**: it represents the user the agent acts for.
+Your agent also needs a resource of its own. This resource is the destination for your sign-in token. The sign-in token is a *subject* token because it represents the person the agent acts on behalf of. The agent sends the subject token to Keycard to exchange it for an MCP server access token.
 
-1. Open **Resources**, click **Add Resource**, and choose **Add Manually** if the console offers the catalog.
-2. Enter these values.
+1. In the Keycard console, open **Resources** and click on **Add Resource** → **Add Manually**.
+2. Enter the following values.
 
    | Field | Value |
    | --- | --- |
-   | Name | `Agent Resource - <githubhandle>` |
-   | Identifier | `urn:agent:resource:<githubhandle>` |
+   | Name | `Agent Resource - <your-github-handle>` |
+   | Identifier | `urn:agent:resource:<your-github-handle>` |
    | Credential provider | Zone Provider |
-   | Provided by Application | `Expense Desk Agent - <githubhandle>` |
+   | Provided by Application | `Agent App - <your-github-handle>` |
 
-3. Save the resource. Open its **Scopes** tab and leave the scope list empty. This resource supplies the audience for sign-in and onward exchange. Expense MCP and Ledger API use their own operation scopes on later hops.
-4. Return to your application and inspect **Provides**. Your resource should already appear because you selected **Provided by Application** during creation. This links the destination to the application that serves it and can exchange tokens addressed to it.
+3. Save the resource.
+4. In the Keycard console, return to Applications → **Agent App - \<your-github-handle>** and click on the **Provides** tab. Your agent resource should already appear there because you selected **Provided by Application** when you created it.
 
-Choose **Zone Provider** because the workshop services validate Keycard-issued tokens. Credential providers determine what Keycard returns for a resource:
+This relationship tells Keycard that your application can exchange sign-in tokens addressed to your agent resource. Your agent uses that exchange to request an MCP server access token on your behalf. Without this relationship, Keycard refuses the exchange.
 
-| Provider | Credential Keycard returns |
-| --- | --- |
-| Zone Provider | A Keycard-issued token for your service, as used by the agent, Expense MCP, and Ledger API. |
-| External OAuth provider | A connected user's provider-issued credential for that provider's API. |
-| Vault provider | A stored secret, such as the model API credential used here. |
+You chose **Zone Provider** because the workshop's services check tokens that Keycard issues. Zone Provider means Keycard itself issues the credential for this resource.
 
-GitHub participates in sign-in; that is distinct from choosing who issues a resource's access credential. See [credential provider concepts](https://docs.keycard.ai/concepts/resources/).
+## Add dependencies to your Keycard application
 
-## Add dependencies before signing in to Expense Desk
+**Provides** means "my application serves this resource." **Depends** means "my application requests credentials for this resource."
 
-**Provides** means "my application serves this resource." **Depends** means "my application requests credentials for this resource." These point in different directions: receiving a token does not by itself authorize every downstream call.
-
-On your application, open **Dependencies**, click **Add dependency**, and connect these three resources:
+In the Keycard console, open **Applications → Agent App - \<your-github-handle> → Dependencies**, click **Add dependency**, and add these four resources:
 
 | Resource | Identifier | Why your Expense Desk agent needs it |
 | --- | --- | --- |
-| Your Expense Desk agent resource | `urn:agent:resource:<githubhandle>` | Sign-in requests a subject token for this audience. |
+| `Agent Resource - <your-github-handle>` | `urn:agent:resource:<your-github-handle>` | Sign-in requests a subject token for this audience. |
 | Expense MCP Resource (already configured by instructor) | `http://localhost:8100/mcp` | Your Expense Desk agent calls the expense tools. |
 | LLM API resource (already configured by instructor) | `https://api.openai.com` | Your Expense Desk agent requests the LLM credential from Keycard's vault. |
+| OpenID Connect UserInfo | Select the UserInfo resource. | Retrieves the signed-in user’s email from Keycard. |
+
+**OpenID Connect UserInfo** lets Expense Desk retrieve the signed-in user’s email from Keycard. Select the UserInfo resource.
 
 Your Expense Desk agent application needs two connections to its own resource:
 
 The Dependencies connection lets the agent request a subject token when you sign in. The Provides connection lets it exchange that token for credentials to call Expense MCP on your behalf.
 
-Each attendee creates a separate agent resource. Everyone uses the same Expense MCP and LLM API resources.
+Each attendee creates a separate agent resource. Everyone uses the same Expense MCP, LLM API, and UserInfo resources.
 
 Your agent's dependencies are now set. The MCP application handles Ledger API access, and the instructor manages its shared configuration. Leave that configuration unchanged.
 
 ## Create your application credentials
 
-1. Open your application, select **Application Credentials**, and click **Add credential**.
-2. Choose **Client ID & Secret**.
-3. Copy both values into `agent/.env` before clicking **Done**. The console shows the secret once. If you lose it, replace that credential and update both values in your file.
+1. Open your application, select the **Application Credentials** tab, and click **Add credential**. Choose **Client ID & Secret**.
+2. The console shows the secret only once, so copy both to `agent/.env` in your editor (the **Editor** tab in Instruqt), as shown below, before you click **Done**.
+
+```ini
+KEYCARD_CLIENT_ID=YOUR-CLIENT-ID
+KEYCARD_CLIENT_SECRET=YOUR-CLIENT-SECRET
+AGENT_RESOURCE=urn:agent:resource:<your-github-handle>
+```
+
+If you lose the secret, replace the credential and update both values.
+
+`KEYCARD_CLIENT_ID` and `KEYCARD_CLIENT_SECRET` verify your agent application's identity. `AGENT_RESOURCE` is the identifier of the resource you created in [Create your resource in Keycard](#create-your-resource-in-keycard). Leave the other lines alone, including `KEYCARD_ISSUER`, `MCP_URL`, and the LLM settings, which the instructors supplied. Confirm changes were auto-saved.
 
 ### Choose credentials for other environments
 
@@ -124,13 +130,7 @@ We'll keep Client ID & Secret for the required exercises so you can use the supp
 
 ## Update the Expense Desk agent `.env`
 
-Edit these fields in `agent/.env`:
-
-```dotenv
-KEYCARD_CLIENT_ID=<client ID from your application credential>
-KEYCARD_CLIENT_SECRET=<client secret from application credential>
-AGENT_RESOURCE=urn:agent:resource:<githubhandle>
-```
+Confirm you saved your application credentials and resource identifier in `agent/.env` as shown in [Create your application credentials](#create-your-application-credentials).
 
 Locally, keep `EXPENSE_DESK_ORIGIN=http://localhost:8400`. In Instruqt, preserve the supplied HTTPS origin and use Expense Desk in its own window for sign-in.
 
@@ -142,9 +142,9 @@ Keep the fixed `KEYCARD_ISSUER`, `MCP_URL`, and LLM settings from [Setup](00-set
 | `AGENT_RESOURCE` | Your personal resource identifier, matching the console. |
 | `MCP_URL` | `http://localhost:8100/mcp` — the endpoint and registered resource identifier. |
 | `EXPENSE_DESK_ORIGIN` | `http://localhost:8400` — the browser app origin. |
-| Application Redirect URI | `http://localhost:8400/callback`. |
+| Application Redirect URL | `http://localhost:8400/callback`. |
 
-Identifiers and redirect URIs must match exactly. A changed port, trailing slash, or `127.0.0.1` in place of `localhost` changes the value.
+Identifiers and redirect URLs must match exactly. A changed port, trailing slash, or `127.0.0.1` in place of `localhost` changes the value.
 
 Zone Provider means Keycard issues credentials for your agent resource. Select the built-in Zone Provider, not the external Auth0 or GitHub provider used for human sign-in.
 
@@ -153,12 +153,12 @@ Zone Provider means Keycard issues credentials for your agent resource. Select t
 Before switching to application authentication, confirm:
 
 - Your app identifier starts with `urn:agent:app:` and uses your GitHub handle.
-- Your resource uses Zone Provider, has no scopes, and your app provides it.
-- Your app depends on your resource, Expense MCP, and the supplied LLM resource.
+- Your app depends on your resource, Expense MCP, LLM API, and OpenID Connect UserInfo.
 - Your app has Implicit consent and the exact callback URL.
-- Your `.env` contains your own credential pair and resource identifier.
+- Your resource configuration uses Zone Provider, and your application provides it.
+- `agent/.env` has values for your Keycard application's client ID, client secret, and your resource identifier.
 
-Next, you'll apply the checkpoint and restart the processes with your new configuration. The checkpoint preserves `.env`; it changes local code, so it can't create or repair your Keycard registration.
+Now that Keycard knows about your agent, you'll switch the agent's code over to use its own identity. The checkpoint preserves `.env`; it changes local code, so it can't create or repair your Keycard registration.
 
 ## Switch to application authentication
 
@@ -188,18 +188,18 @@ Use the absolute package path you resolved during setup in place of `<package-pa
    uv run --locked --project agent python agent/web.py
    ```
 
-   Open your configured Expense Desk URL and choose **Continue as Expense Desk Agent**. Keep this browser server running. Your agent acts as its registered application until you sign in.
+   Open your configured Expense Desk URL, refresh the page, and choose **Continue as Expense Desk Agent**. Keep this browser server running. Your agent acts as its registered application until you sign in.
 
 ## Check which identity Expense Desk records
 
 1. In **Expense Desk browser chat**, enter "Which account am I using, and what is my approval limit?"
 2. Ask it to file a new $75 workshop expense under someone else's name. Save the expense ID and read Created by in the agent’s confirmation. The Expense Desk agent should record your registered application regardless of the provided name.
-3. In the **Keycard console**, open **Applications → Expense Desk Agent - <your GitHub username> → Activity**. Clear earlier filters with **Filters → Clear** and set **Resource → Expense MCP Resource**. Inspect **Credential Issued** for your application. This initial credential uses client credentials and identifies your application.
-4. With the instructor, open **Applications → Expense MCP Actor → Activity**, clear old filters, and set **Resource → Ledger API**. The onward event is **Credential Issued**, labeled `urn:ietf:params:oauth:grant-type:token-exchange`. Inspect its delegation details to confirm the application subject from this demonstration.
+3. In the **Keycard console**, open **Applications → Agent App - \<your-github-handle> → Activity**. Click the Filter icon. If any filters are active, clear them, then set Resource → Expense MCP Resource. Open a **Credential Issued** event for your application. This credential came from a client credentials grant, and it identifies your application as the Actor accessing the Expense MCP Resource.
+4. With the instructor, stay in the Keycard console and open **Applications → Expense MCP Actor → Activity**, clear old filters, and set **Resource → Ledger API**. The onward event is **Credential Issued**, labeled `urn:ietf:params:oauth:grant-type:token-exchange`. Inspect its delegation details to confirm the application subject from this demonstration.
 
-Expense MCP Actor authenticates as the MCP server and exchanges the token it received for a token addressed to the Ledger API. This feed contains credential requests from the whole workshop. Follow the instructor's selected example and confirm its application subject in the delegation details.
+Expense MCP Actor authenticates as the MCP server and exchanges the token it received for a token addressed to the Ledger API on behalf of your Agent App (the agent acting as itself). This feed contains credential requests from the whole workshop. Follow the instructor's selected example and confirm its application subject in the delegation details.
 
-Your Expense Desk agent requests MCP and LLM credentials when it needs them. This run has no signed-in user. Inspect the expense's Activity in the same browser. In Exercise 03, you'll sign in without restarting it.
+Your Expense Desk agent requests MCP and LLM credentials when it needs them. This run has no signed-in user. Return to Expense Desk, select the expense you just created, and inspect its **Activity** section. In Exercise 03, you'll sign in to Expense Desk without restarting its server.
 
 ## If you get stuck
 
