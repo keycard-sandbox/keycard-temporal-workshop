@@ -102,7 +102,7 @@ async def main() -> None:
                 # Use the Temporal worker identity explicitly, separate from agent credentials.
                 KeycardInterceptor(
                     zone_url=os.environ["KEYCARD_ISSUER"],
-                    credential=ClientSecret((client_id, client_secret)),
+                    application_credential=ClientSecret((client_id, client_secret)),
                 )
             ],
         )

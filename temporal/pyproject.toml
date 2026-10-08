@@ -8,7 +8,7 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "keycardai-temporal>=0.4.1",
+    "keycardai-temporal>=0.6.0",
 ]
 
 [tool.uv]
