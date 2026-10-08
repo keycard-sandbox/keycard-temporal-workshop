@@ -40,16 +40,15 @@ EOF
 fi
 
 # Exercise 04. Each sandbox has its own Temporal server, so the queue name
-# from docs/06-temporal-local.md is safe to share. The instructors hand out
-# the Temporal Worker credentials during the workshop; attendees fill them in.
+# from docs/06-temporal-local.md is safe to share.
 if [ -d "$WORKSHOP/temporal" ] && [ ! -f "$WORKSHOP/temporal/.env" ]; then
     cat > "$WORKSHOP/temporal/.env" <<EOF
 TEMPORAL_ADDRESS=127.0.0.1:7233
 TEMPORAL_NAMESPACE=default
 TEMPORAL_TASK_QUEUE=keycard-temporal-demo
 KEYCARD_ISSUER=${ISSUER}
-WORKER_KEYCARD_CLIENT_ID=
-WORKER_KEYCARD_CLIENT_SECRET=
+WORKER_KEYCARD_CLIENT_ID=${KEYCARD_WORKSHOP_WORKER_CLIENT_ID:-}
+WORKER_KEYCARD_CLIENT_SECRET=${KEYCARD_WORKSHOP_WORKER_CLIENT_SECRET:-}
 LEDGER_RESOURCE=urn:ledger:api
 EOF
 fi
